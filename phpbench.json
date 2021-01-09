@@ -1,0 +1,13 @@
+{
+    "bootstrap": "./vendor/autoload.php",
+    "path": "./benchmarks/",
+    "progress": "dots",
+    "reports": {
+        "speed": {
+            "extends": "aggregate",
+            "title": "Throttler benchmarks",
+            "description": "How long strategies take to load balancing",
+            "cols": ["benchmark", "revs", "its", "mean", "min", "max", "sum", "diff"]
+        }
+    }
+}
