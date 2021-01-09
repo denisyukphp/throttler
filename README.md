@@ -1,6 +1,6 @@
 # Throttler
 
-[![Build Status](https://travis-ci.com/orangesoft/throttler.svg?branch=master)](https://travis-ci.com/orangesoft/throttler)
+[![Build Status](https://travis-ci.com/Orangesoft-Development/throttler.svg?branch=main)](https://travis-ci.com/Orangesoft-Development/throttler)
 [![Latest Stable Version](https://poser.pugx.org/orangesoft/throttler/v)](//packagist.org/packages/orangesoft/throttler) 
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/orangesoft/throttler)](https://packagist.org/packages/orangesoft/throttler)
 [![Total Downloads](https://poser.pugx.org/orangesoft/throttler/downloads)](https://packagist.org/packages/orangesoft/throttler)
