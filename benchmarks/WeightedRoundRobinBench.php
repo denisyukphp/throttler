@@ -7,10 +7,14 @@ use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
 use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\ThrottlerInterface;
 
 class WeightedRoundRobinBench
 {
-    private $loadBalancer;
+    /**
+     * @var ThrottlerInterface
+     */
+    private $throttler;
 
     public function __construct()
     {
@@ -20,7 +24,7 @@ class WeightedRoundRobinBench
             new Node('node3', 1),
         ];
 
-        $this->loadBalancer = new Throttler(
+        $this->throttler = new Throttler(
             new Collection($nodes),
             new WeightedRoundRobinStrategy(
                 new InMemoryCounter()
@@ -34,6 +38,6 @@ class WeightedRoundRobinBench
      */
     public function benchWeightedRoundRobin()
     {
-        $this->loadBalancer->next();
+        $this->throttler->next();
     }
 }

@@ -6,10 +6,14 @@ use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Strategy\FrequencyRandomStrategy;
 use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\ThrottlerInterface;
 
 class FrequencyRandomBench
 {
-    private $loadBalancer;
+    /**
+     * @var ThrottlerInterface
+     */
+    private $throttler;
 
     public function __construct()
     {
@@ -19,7 +23,7 @@ class FrequencyRandomBench
             new Node('node3'),
         ];
 
-        $this->loadBalancer = new Throttler(
+        $this->throttler = new Throttler(
             new Collection($nodes),
             new FrequencyRandomStrategy()
         );
@@ -31,6 +35,6 @@ class FrequencyRandomBench
      */
     public function benchFrequencyRandom()
     {
-        $this->loadBalancer->next();
+        $this->throttler->next();
     }
 }

@@ -6,10 +6,14 @@ use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Strategy\SmoothWeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\ThrottlerInterface;
 
 class SmoothWeightedRoundRobinBench
 {
-    private $loadBalancer;
+    /**
+     * @var ThrottlerInterface
+     */
+    private $throttler;
 
     public function __construct()
     {
@@ -19,7 +23,7 @@ class SmoothWeightedRoundRobinBench
             new Node('node3', 1),
         ];
 
-        $this->loadBalancer = new Throttler(
+        $this->throttler = new Throttler(
             new Collection($nodes),
             new SmoothWeightedRoundRobinStrategy()
         );
@@ -31,6 +35,6 @@ class SmoothWeightedRoundRobinBench
      */
     public function benchSmoothWeightedRoundRobin()
     {
-        $this->loadBalancer->next();
+        $this->throttler->next();
     }
 }
