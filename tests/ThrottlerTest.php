@@ -22,29 +22,29 @@ class ThrottlerTest extends TestCase
             new Node('node3'),
         ];
 
-        $loadBalancer = new Throttler(
+        $throttler = new Throttler(
             new Collection($nodes),
             new RoundRobinStrategy(
                 new InMemoryCounter()
             )
         );
 
-        $next = $loadBalancer->next();
+        $next = $throttler->next();
 
-        $this->assertInstanceOf(ThrottlerInterface::class, $loadBalancer);
+        $this->assertInstanceOf(ThrottlerInterface::class, $throttler);
         $this->assertInstanceOf(Node::class, $next);
         $this->assertSame('node1', $next->getName());
     }
 
     public function testEmpty()
     {
-        $this->expectException(EmptyCollectionException::class);
-
-        $loadBalancer = new Throttler(
+        $throttler = new Throttler(
             new Collection(),
             new RandomStrategy()
         );
 
-        $loadBalancer->next();
+        $this->expectException(EmptyCollectionException::class);
+
+        $throttler->next();
     }
 }
