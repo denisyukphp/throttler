@@ -1,10 +1,16 @@
 # Throttler
 
-[![Build Status](https://travis-ci.com/Orangesoft-Development/throttler.svg?branch=main)](https://travis-ci.com/Orangesoft-Development/throttler)
-[![Latest Stable Version](https://poser.pugx.org/orangesoft/throttler/v)](//packagist.org/packages/orangesoft/throttler) 
-[![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/orangesoft/throttler)](https://packagist.org/packages/orangesoft/throttler)
-[![Total Downloads](https://poser.pugx.org/orangesoft/throttler/downloads)](https://packagist.org/packages/orangesoft/throttler)
-[![License](https://poser.pugx.org/orangesoft/throttler/license)](https://packagist.org/packages/orangesoft/throttler)
+[![Build Status](https://img.shields.io/travis/com/Orangesoft-Development/throttler/main?style=plastic)](https://travis-ci.com/Orangesoft-Development/throttler)
+[![Latest Stable Version](https://img.shields.io/packagist/v/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
+[![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/orangesoft/throttler?style=plastic&color=8892BF)](https://packagist.org/packages/orangesoft/throttler)
+[![Total Downloads](https://img.shields.io/packagist/dt/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
+[![License](https://img.shields.io/packagist/l/doctrine/orm?style=plastic&color=428F7E)](https://packagist.org/packages/orangesoft/throttler)
+
+Throttler is the load balancer between nodes.
+
+## Installation
+
+You can install the latest version via [Composer](https://getcomposer.org/):
 
 ```text
 composer require orangesoft/throttler
@@ -74,4 +80,4 @@ The report is based on measuring the speed. Check `diff` column to find out whic
 - [WeightedRoundRobin](src/Strategy/WeightedRoundRobinStrategy.php)
 - [SmoothWeightedRoundRobin](src/Strategy/SmoothWeightedRoundRobinStrategy.php)
 
-Read more about load balancing and algorithms on [Wikipedia](https://en.wikipedia.org/wiki/Load_balancing_(computing)).
+Read more about usage on [Orangesoft Tech](https://orangesoft.co/blog/how-to-make-proxy-balancing-in-guzzle).
