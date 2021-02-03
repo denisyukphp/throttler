@@ -13,7 +13,7 @@ class RandomStrategy implements Strategy
      */
     public function getIndex(Collection $collection): int
     {
-        $index = rand(1, $collection->getQuantity());
+        $index = mt_rand(1, $collection->getQuantity());
 
         return $index - 1;
     }

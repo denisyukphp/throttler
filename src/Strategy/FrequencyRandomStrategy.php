@@ -37,7 +37,7 @@ class FrequencyRandomStrategy implements Strategy
         $offset = $this->getOffset($this->depth, $quantity);
         $nextOffset = $this->getNextOffset($offset, $quantity);
 
-        $index = $this->isChance($this->frequency) ? rand(1, $offset) : rand($nextOffset, $quantity);
+        $index = $this->isChance($this->frequency) ? mt_rand(1, $offset) : mt_rand($nextOffset, $quantity);
 
         return $index - 1;
     }
@@ -71,6 +71,6 @@ class FrequencyRandomStrategy implements Strategy
      */
     private function isChance(int $frequency): bool
     {
-        return $frequency >= rand(1, 100);
+        return $frequency >= mt_rand(1, 100);
     }
 }

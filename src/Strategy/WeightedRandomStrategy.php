@@ -29,7 +29,7 @@ class WeightedRandomStrategy implements Strategy
             throw new NotWeightedCollectionException('Add at least one weighted node to collection');
         }
 
-        $offset = rand(1, $sumWeight);
+        $offset = mt_rand(1, $sumWeight);
 
         foreach ($collection as $index => $node) {
             $currentWeight += $node->getWeight();
