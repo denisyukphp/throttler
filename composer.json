@@ -1,6 +1,6 @@
 {
     "name": "orangesoft/throttler",
-    "description": "Load balancer",
+    "description": "Load balancer between nodes",
     "keywords": ["load", "balancing", "random", "round", "robin", "weighted", "frequency", "smooth"],
     "license": "MIT",
     "authors": [
