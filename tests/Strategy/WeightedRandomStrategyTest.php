@@ -9,7 +9,7 @@ use Orangesoft\Throttler\Strategy\WeightedRandomStrategy;
 
 class WeightedRandomStrategyTest extends TestCase
 {
-    public function testWeightedRandom()
+    public function testWeightedRandom(): void
     {
         $nodes = [
             new Node('node1', 10),

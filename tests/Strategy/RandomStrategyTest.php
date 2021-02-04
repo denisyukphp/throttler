@@ -9,7 +9,7 @@ use Orangesoft\Throttler\Strategy\RandomStrategy;
 
 class RandomStrategyTest extends TestCase
 {
-    public function testRandom()
+    public function testRandom(): void
     {
         $nodes = [
             new Node('node1'),

@@ -53,7 +53,7 @@ class SmoothWeightedRoundRobinStrategyTest extends TestCase
      *
      * @depends testSerialize
      */
-    public function testUnserialize(string $serialized)
+    public function testUnserialize(string $serialized): void
     {
         $nodes = [
             new Node('node1', 5),

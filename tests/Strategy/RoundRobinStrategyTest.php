@@ -40,7 +40,7 @@ class RoundRobinStrategyTest extends TestCase
      *
      * @depends testRoundRobin
      */
-    public function testRestart(InMemoryCounter $inMemoryCounter)
+    public function testRestart(InMemoryCounter $inMemoryCounter): void
     {
         $nodes = [
             new Node('node1'),

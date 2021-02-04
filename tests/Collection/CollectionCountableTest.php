@@ -8,7 +8,7 @@ use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionCountableTest extends TestCase
 {
-    public function testCountable()
+    public function testCountable(): void
     {
         $nodes = [
             new Node('node1'),

@@ -11,7 +11,7 @@ use Orangesoft\Throttler\Collection\Desc;
 
 class SorterTest extends TestCase
 {
-    public function testSortAsc()
+    public function testSortAsc(): void
     {
         $nodes = [
             new Node('node2', 8),
@@ -39,7 +39,7 @@ class SorterTest extends TestCase
         }
     }
 
-    public function testSortDesc()
+    public function testSortDesc(): void
     {
         $nodes = [
             new Node('node2', 8),

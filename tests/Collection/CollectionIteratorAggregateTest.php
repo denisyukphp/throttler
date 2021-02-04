@@ -8,7 +8,7 @@ use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionIteratorAggregateTest extends TestCase
 {
-    public function testIterable()
+    public function testIterable(): void
     {
         $nodes = [
             new Node('node1'),

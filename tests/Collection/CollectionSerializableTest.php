@@ -8,7 +8,7 @@ use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionSerializableTest extends TestCase
 {
-    public function testSerializable()
+    public function testSerializable(): void
     {
         $nodes = [
             new Node('node1'),

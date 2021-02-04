@@ -8,19 +8,16 @@ use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionTest extends TestCase
 {
-    public function testAdd()
+    public function testAdd(): void
     {
         $nodes = [
             new Node('node1'),
             new Node('node2'),
+            new Node('node3'),
+            new Node('node4'),
         ];
 
         $collection = new Collection($nodes);
-
-        $collection
-            ->addNode(new Node('node3'))
-            ->addNode(new Node('node4'))
-        ;
 
         $this->assertInstanceOf(Collection::class, $collection);
 
@@ -31,14 +28,14 @@ class CollectionTest extends TestCase
         }
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $collection = new Collection();
 
         $this->assertTrue($collection->isEmpty());
     }
 
-    public function testNotEmpty()
+    public function testNotEmpty(): void
     {
         $nodes = [
             new Node('node1'),
@@ -52,7 +49,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->isEmpty());
     }
 
-    public function testQuantity()
+    public function testQuantity(): void
     {
         $nodes = [
             new Node('node1'),

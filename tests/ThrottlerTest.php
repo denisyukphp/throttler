@@ -14,7 +14,7 @@ use Orangesoft\Throttler\ThrottlerInterface;
 
 class ThrottlerTest extends TestCase
 {
-    public function testNext()
+    public function testNext(): void
     {
         $nodes = [
             new Node('node1'),
@@ -36,7 +36,7 @@ class ThrottlerTest extends TestCase
         $this->assertSame('node1', $next->getName());
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $throttler = new Throttler(
             new Collection(),

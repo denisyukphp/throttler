@@ -9,7 +9,7 @@ use Orangesoft\Throttler\Strategy\FrequencyRandomStrategy;
 
 class FrequencyRandomStrategyTest extends TestCase
 {
-    public function testFrequencyRandom()
+    public function testFrequencyRandom(): void
     {
         $nodes = [
             new Node('node1'),

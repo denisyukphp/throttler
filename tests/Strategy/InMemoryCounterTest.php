@@ -7,7 +7,7 @@ use Orangesoft\Throttler\Strategy\InMemoryCounter;
 
 class InMemoryCounterTest extends TestCase
 {
-    public function testIncrement()
+    public function testIncrement(): void
     {
         $inMemoryCounter = new InMemoryCounter(5);
 

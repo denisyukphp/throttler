@@ -7,7 +7,7 @@ use Orangesoft\Throttler\Collection\Node;
 
 class NodeTest extends TestCase
 {
-    public function testNode()
+    public function testNode(): void
     {
         $node = new Node('node1', 4);
 

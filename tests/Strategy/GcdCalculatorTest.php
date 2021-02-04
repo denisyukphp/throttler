@@ -7,7 +7,7 @@ use Orangesoft\Throttler\Strategy\GcdCalculator;
 
 class GcdCalculatorTest extends TestCase
 {
-    public function testCalculate()
+    public function testCalculate(): void
     {
         $gcd = GcdCalculator::calculate(12, 21);
 

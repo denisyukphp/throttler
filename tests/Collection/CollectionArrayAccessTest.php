@@ -8,7 +8,7 @@ use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionArrayAccessTest extends TestCase
 {
-    public function testExists()
+    public function testExists(): void
     {
         $nodes = [
             new Node('node1'),
@@ -19,14 +19,14 @@ class CollectionArrayAccessTest extends TestCase
         $this->assertTrue(isset($collection[0]));
     }
 
-    public function testNotExists()
+    public function testNotExists(): void
     {
         $collection = new Collection();
 
         $this->assertFalse(isset($collection[0]));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $nodes = [
             new Node('node1'),
@@ -37,7 +37,7 @@ class CollectionArrayAccessTest extends TestCase
         $this->assertSame('node1', $collection[0]->getName());
     }
 
-    public function testGetNotExists()
+    public function testGetNotExists(): void
     {
         $collection = new Collection();
 
@@ -46,7 +46,7 @@ class CollectionArrayAccessTest extends TestCase
         $collection[0];
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $collection = new Collection();
 
@@ -55,7 +55,7 @@ class CollectionArrayAccessTest extends TestCase
         $this->assertCount(1, $collection);
     }
 
-    public function testSetWithKey()
+    public function testSetWithKey(): void
     {
         $collection = new Collection();
 
@@ -64,7 +64,7 @@ class CollectionArrayAccessTest extends TestCase
         $this->assertNotEmpty($collection);
     }
 
-    public function testWrongKey()
+    public function testWrongKey(): void
     {
         $collection = new Collection();
 
@@ -73,7 +73,7 @@ class CollectionArrayAccessTest extends TestCase
         $collection['key'] = new Node('node1');
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $collection = new Collection();
 
@@ -82,7 +82,7 @@ class CollectionArrayAccessTest extends TestCase
         $collection[] = 'node1';
     }
 
-    public function testUnset()
+    public function testUnset(): void
     {
         $nodes = [
             new Node('node1'),
