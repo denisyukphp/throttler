@@ -12,7 +12,7 @@ class InMemoryCounter implements Counter
     /**
      * @param int $counter
      */
-    public function __construct(int $counter = -1)
+    public function __construct(int $counter = 0)
     {
         $this->counter = $counter;
     }
@@ -22,6 +22,6 @@ class InMemoryCounter implements Counter
      */
     public function increment(): int
     {
-        return ++$this->counter;
+        return $this->counter++;
     }
 }
