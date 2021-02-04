@@ -36,7 +36,7 @@ class WeightedRoundRobinBench
      * @Revs(1000)
      * @Iterations(5)
      */
-    public function benchWeightedRoundRobin()
+    public function benchWeightedRoundRobin(): void
     {
         $this->throttler->next();
     }

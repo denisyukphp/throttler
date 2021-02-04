@@ -33,7 +33,7 @@ class SmoothWeightedRoundRobinBench
      * @Revs(1000)
      * @Iterations(5)
      */
-    public function benchSmoothWeightedRoundRobin()
+    public function benchSmoothWeightedRoundRobin(): void
     {
         $this->throttler->next();
     }

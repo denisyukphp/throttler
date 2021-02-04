@@ -33,7 +33,7 @@ class RandomBench
      * @Revs(1000)
      * @Iterations(5)
      */
-    public function benchRandom()
+    public function benchRandom(): void
     {
         $this->throttler->next();
     }
