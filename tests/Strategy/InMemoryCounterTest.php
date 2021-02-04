@@ -11,7 +11,7 @@ class InMemoryCounterTest extends TestCase
     {
         $inMemoryCounter = new InMemoryCounter(5);
 
-        for ($i = 6; $i < 10; $i++) {
+        for ($i = 5; $i < 10; $i++) {
             $this->assertSame($i, $inMemoryCounter->increment());
         }
     }
