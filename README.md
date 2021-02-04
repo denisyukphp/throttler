@@ -20,6 +20,8 @@ This package requires PHP 7.2 or later.
 
 ## Quick usage
 
+Configure a Throttler as below:
+
 ```php
 <?php
 
@@ -46,11 +48,13 @@ while (true) {
     /** @var Node $node */
     $node = $throttler->next();
     
+    $name = $node->getName();
+    
     // ...
 }
 ```
 
-Set weight for Node as the second argument in constructor if you are using weighted-strategies.
+Set weight for a Node as the second argument in constructor if you are using weighted-strategies.
 
 ## Benchmarks
 
@@ -71,13 +75,13 @@ Run `composer bench` to check out strategies benchmarks from the package:
 
 The report is based on measuring the speed. Check `diff` column to find out which strategy is the fastest. You can see that the fastest strategies are Random and RoundRobin.
 
-## Strategies
+## Documentation
 
-- [Random](src/Strategy/RandomStrategy.php)
-- [WeightedRandom](src/Strategy/WeightedRandomStrategy.php)
-- [FrequencyRandom](src/Strategy/FrequencyRandomStrategy.php)
-- [RoundRobin](src/Strategy/RoundRobinStrategy.php)
-- [WeightedRoundRobin](src/Strategy/WeightedRoundRobinStrategy.php)
-- [SmoothWeightedRoundRobin](src/Strategy/SmoothWeightedRoundRobinStrategy.php)
+- [Configuration](docs/index.md#configuration)
+- [Available strategies](docs/index.md#available-strategies)
+- [Sort nodes](docs/index.md#sort-nodes)
+- [Keep counter](docs/index.md#keep-counter)
+- [Serialize strategies](docs/index.md#serialize-strategies)
+- [Supported tools](docs/index.md#supported-tools)
 
 Read more about usage on [Orangesoft Tech](https://orangesoft.co/blog/how-to-make-proxy-balancing-in-guzzle).
