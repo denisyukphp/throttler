@@ -14,21 +14,9 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function __construct(iterable $nodes = [])
     {
-        foreach ($nodes as $node) {
-            $this->addNode($node);
+        foreach ($nodes as $index => $node) {
+            $this[$index] = $node;
         }
-    }
-
-    /**
-     * @param Node $node
-     *
-     * @return self
-     */
-    public function addNode(Node $node): self
-    {
-        $this->nodes[] = $node;
-
-        return $this;
     }
 
     /**
@@ -96,7 +84,7 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function isEmpty(): bool
     {
-        return 0 === $this->getQuantity();
+        return empty($this->nodes);
     }
 
     /**
