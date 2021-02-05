@@ -73,7 +73,7 @@ Run `composer bench` to check out strategies benchmarks from the package:
 +-------------------------------+------+-----+---------+-------+-------+--------+-------+
 ```
 
-The report is based on measuring the speed. Check `diff` column to find out which strategy is the fastest. You can see that the fastest strategies are Random and RoundRobin.
+The report is based on measuring the speed. Check `diff` column to find out which strategy is the fastest. You can see that the fastest strategies are random and round-robin.
 
 ## Documentation
 
