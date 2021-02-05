@@ -33,7 +33,6 @@
         "test": "vendor/bin/phpunit --colors=always",
         "bench": "vendor/bin/phpbench run --report=speed --ansi"
     },
-    "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "sort-packages": true
