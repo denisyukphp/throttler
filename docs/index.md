@@ -194,10 +194,8 @@ class RedisCounter implements Counter
         $this->client = $client;
     }
 
-    public function increment(): int
+    public function increment(string $key = 'throttler:weighted-round-robin:counter'): int
     {
-        $key = 'throttler:weighted-round-robin:counter';
-
         if (!$this->client->exists($key)) {
             $this->client->set($key, -1);
         }
