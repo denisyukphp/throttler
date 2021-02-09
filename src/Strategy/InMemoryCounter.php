@@ -18,9 +18,11 @@ class InMemoryCounter implements Counter
     }
 
     /**
+     * @param string $key
+     *
      * @return int
      */
-    public function increment(): int
+    public function increment(string $key = 'default'): int
     {
         return $this->counter++;
     }
