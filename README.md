@@ -20,7 +20,7 @@ This package requires PHP 7.2 or later.
 
 ## Quick usage
 
-Configure a Throttler as below:
+Configure Throttler as below:
 
 ```php
 <?php
@@ -54,11 +54,11 @@ while (true) {
 }
 ```
 
-Set weight for a Node as the second argument in constructor if you are using weighted-strategies.
+Set weight for Node as the second argument in constructor if you are using weighted-strategies.
 
 ## Benchmarks
 
-Run `composer bench` to check out strategies benchmarks from the package:
+Run `composer bench` to check out strategies benchmarks:
 
 ```text
 +-------------------------------+------+-----+---------+-------+-------+--------+-------+
@@ -73,7 +73,7 @@ Run `composer bench` to check out strategies benchmarks from the package:
 +-------------------------------+------+-----+---------+-------+-------+--------+-------+
 ```
 
-The report is based on measuring the speed. Check `diff` column to find out which strategy is the fastest. You can see that the fastest strategies are random and round-robin.
+The report is based on measuring the speed. Check `diff` column to find out which strategy is the fastest. You can see that the fastest strategies are Random and RoundRobin.
 
 ## Documentation
 
