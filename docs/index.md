@@ -194,7 +194,7 @@ class RedisCounter implements Counter
         $this->client = $client;
     }
 
-    public function increment(string $key = 'throttler:weighted-round-robin:counter'): int
+    public function increment(string $key = 'default'): int
     {
         if (!$this->client->exists($key)) {
             $this->client->set($key, -1);
@@ -258,4 +258,4 @@ The table below shows which tools each strategy supports:
 +----------------------------------+-----------+-----------+-----------+
 ```
 
-To implement your strategy in Throttler, you need to implement [Strategy](../src/Strategy/Strategy.php) interface.
+To implement your strategy in Throttler you need to implement [Strategy](../src/Strategy/Strategy.php) interface.
