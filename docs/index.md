@@ -9,7 +9,7 @@
 
 ## Configuration
 
-You need to collect a collection of nodes and choose a strategy. Set weight for a Node as the second argument in constructor if you are using weighted-strategies.
+You need to collect a collection of nodes and choose a strategy. Set weight for Node as the second argument in constructor if you are using weighted-strategies:
 
 ```php
 <?php
@@ -20,11 +20,13 @@ use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
 use Orangesoft\Throttler\Throttler;
 
-$collection = new Collection([
+$nodes = [
     new Node('node1', 5),
     new Node('node2', 1),
     new Node('node3', 1),
-]);
+];
+
+$collection = new Collection($nodes);
 
 $strategy = new WeightedRoundRobinStrategy(
     new InMemoryCounter()
@@ -33,7 +35,7 @@ $strategy = new WeightedRoundRobinStrategy(
 $throttler = new Throttler($collection, $strategy);
 ```
 
-To use a Throttler just call the `next()` method.
+To use Throttler just call the `next()` method.
 
 ```php
 while (true) {
@@ -61,7 +63,7 @@ As a result, you will see the following distribution of nodes:
 +-------+
 ```
 
-The Thtottler result depends on the chosen strategy.
+Thtottler's result depends on the chosen strategy.
 
 ## Available strategies
 
@@ -76,7 +78,7 @@ Strategies are divided into two types: random and round-robin. The following str
 
 ## Sort nodes
 
-For some strategies, such as a [FrequencyRandomStrategy](../src/Strategy/FrequencyRandomStrategy.php), it may be necessary to adjust the order of nodes by their weight. This can be done with a Sorter:
+For some strategies, such as [FrequencyRandomStrategy](../src/Strategy/FrequencyRandomStrategy.php), it may be necessary to adjust the order of nodes by their weight. This can be done with Sorter:
 
 ```php
 <?php
@@ -126,7 +128,7 @@ The nodes at the top of the list should be used more often. You can manage sorti
 +--------+--------+
 ```
 
-The FrequencyRandomStrategy has 2 not required options: a frequency is probability to choose nodes from a first group in percent, a depth is length the first group from the list in percent. By default the frequency is 80 and the depth is 20.
+FrequencyRandomStrategy has 2 not required options: frequency is probability to choose nodes from a first group in percent, depth is length the first group from the list in percent. By default frequency is 80 and depth is 20.
 
 ```php
 $frequency = 80;
@@ -140,7 +142,7 @@ $throttler = new Throttler($sortedCollection, $strategy);
 $node = $throttler->next();
 ```
 
-The probability of choosing nodes for the FrequencyRandomStrategy can be visualized as follows:
+The probability of choosing nodes for FrequencyRandomStrategy can be visualized as follows:
 
 ```text
 +--------+--------+
@@ -160,11 +162,11 @@ The probability of choosing nodes for the FrequencyRandomStrategy can be visuali
 +--------+--------+
 ```
 
-If you need the reverse order of the nodes use the Asc direction.
+If you need the reverse order of the nodes use Asc direction.
 
 ## Keep counter
 
-For strategies are [RoundRobinStrategy](../src/Strategy/RoundRobinStrategy.php) and [WeightedRoundRobinStrategy](../src/Strategy/WeightedRoundRobinStrategy.php) you must use a InMemoryCounter to remember order of nodes. A counter is not needed for round-robin strategies.
+For strategies are [RoundRobinStrategy](../src/Strategy/RoundRobinStrategy.php) and [WeightedRoundRobinStrategy](../src/Strategy/WeightedRoundRobinStrategy.php) you must use InMemoryCounter to remember order of nodes. A counter is not needed for round-robin strategies.
 
 ```php
 <?php
@@ -180,7 +182,7 @@ $counter = new InMemoryCounter();
 $strategy = new RoundRobinStrategy($counter);
 ```
 
-You can replace the InMemoryCounter if you need to keep the order of these strategies between PHP calls, for example, in queues. Just implement a [Counter](../src/Strategy/Counter.php) interface:
+You can replace InMemoryCounter if you need to keep the order of these strategies between PHP calls, for example, in queues. Just implement [Counter](../src/Strategy/Counter.php) interface:
 
 ```php
 class RedisCounter implements Counter
@@ -215,11 +217,11 @@ $counter = new RedisCounter($client);
 $strategy = new WeightedRoundRobinStrategy($counter);
 ```
 
-Now the Throttler will resume work from the last node according to the chosen strategy.
+Now Throttler will resume work from the last node according to the chosen strategy.
 
 ## Serialize strategies
 
-A [SmoothWeightedRoundRobinStrategy](../src/Strategy/SmoothWeightedRoundRobinStrategy.php) does not supported counters. Instead it you can serialize and unserialize this strategy to keep last state:
+[SmoothWeightedRoundRobinStrategy](../src/Strategy/SmoothWeightedRoundRobinStrategy.php) does not supported counters. Instead it you can serialize and unserialize this strategy to keep last state:
 
 ```php
 <?php
@@ -232,7 +234,7 @@ $strategy = new SmoothWeightedRoundRobinStrategy();
 $serialized = serialize($strategy);
 ```
 
-The serialization result will return an instance of the SmoothWeightedRoundRobinStrategy with the actual weights for the nodes.
+The serialization result will return an instance of SmoothWeightedRoundRobinStrategy with the actual weights for the nodes.
 
 ```php
 /** @var SmoothWeightedRoundRobinStrategy $strategy */
@@ -258,4 +260,4 @@ The table below shows which tools each strategy supports:
 +----------------------------------+-----------+-----------+-----------+
 ```
 
-To implement your strategy in the Throttler, you need to implement a [Strategy](../src/Strategy/Strategy.php) interface.
+To implement your strategy in Throttler, you need to implement [Strategy](../src/Strategy/Strategy.php) interface.
