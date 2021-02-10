@@ -15,6 +15,7 @@ You need to collect a collection of nodes and choose a strategy. Set weight for 
 <?php
 
 use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
@@ -39,7 +40,7 @@ To use Throttler just call the `next()` method.
 
 ```php
 while (true) {
-    /** @var Node $node */
+    /** @var NodeInterface $node */
     $node = $throttler->next();
     
     $name = $node->getName();
@@ -84,7 +85,9 @@ For some strategies, such as [FrequencyRandomStrategy](../src/Strategy/Frequency
 <?php
 
 use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Sorter;
 use Orangesoft\Throttler\Collection\Desc;
 use Orangesoft\Throttler\Strategy\FrequencyRandomStrategy;
@@ -105,7 +108,7 @@ $collection = new Collection([
 
 $sorter = new Sorter();
 
-/** @var Collection $sortedCollection */
+/** @var CollectionInterface $sortedCollection */
 $sortedCollection = $sorter->sort($collection, new Desc());
 ```
 
@@ -138,7 +141,7 @@ $strategy = new FrequencyRandomStrategy($frequency, $depth);
 
 $throttler = new Throttler($sortedCollection, $strategy);
 
-/** @var Node $node */
+/** @var NodeInterface $node */
 $node = $throttler->next();
 ```
 
@@ -171,8 +174,8 @@ For strategies are [RoundRobinStrategy](../src/Strategy/RoundRobinStrategy.php) 
 ```php
 <?php
 
-use Orangesoft\Throttler\Strategy\Counter;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use Orangesoft\Throttler\Strategy\CounterInterface;
 use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Predis\Client;
@@ -182,10 +185,10 @@ $counter = new InMemoryCounter();
 $strategy = new RoundRobinStrategy($counter);
 ```
 
-You can replace InMemoryCounter if you need to keep the order of these strategies between PHP calls, for example, in queues. Just implement [Counter](../src/Strategy/Counter.php) interface:
+You can replace InMemoryCounter if you need to keep the order of these strategies between PHP calls, for example, in queues. Just to implement [CounterInterface](../src/Strategy/CounterInterface.php):
 
 ```php
-class RedisCounter implements Counter
+class RedisCounter implements CounterInterface
 {
     private $client;
 
@@ -258,4 +261,4 @@ The table below shows which tools each strategy supports:
 +----------------------------------+-----------+-----------+-----------+
 ```
 
-To implement your strategy in Throttler you need to implement [Strategy](../src/Strategy/Strategy.php) interface.
+To implement your strategy in Throttler you need to implement [StrategyInterface](../src/Strategy/StrategyInterface.php).
