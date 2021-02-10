@@ -4,6 +4,7 @@ namespace Orangesoft\Throttler\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 use Orangesoft\Throttler\Strategy\RandomStrategy;
@@ -32,7 +33,7 @@ class ThrottlerTest extends TestCase
         $next = $throttler->next();
 
         $this->assertInstanceOf(ThrottlerInterface::class, $throttler);
-        $this->assertInstanceOf(Node::class, $next);
+        $this->assertInstanceOf(NodeInterface::class, $next);
         $this->assertSame('node1', $next->getName());
     }
 

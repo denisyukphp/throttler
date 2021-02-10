@@ -26,17 +26,10 @@ class SorterTest extends TestCase
 
         $sortedCollection = $sorter->sort($collection, new Asc());
 
-        $this->assertInstanceOf(Collection::class, $sortedCollection);
-
-        $minWeight = 4;
-
-        foreach ($sortedCollection as $node) {
-            $weight = $node->getWeight();
-
-            $this->assertGreaterThanOrEqual($minWeight, $weight);
-
-            $minWeight = $weight;
-        }
+        $this->assertSame('node1', $sortedCollection->getNode(0)->getName());
+        $this->assertSame('node2', $sortedCollection->getNode(1)->getName());
+        $this->assertSame('node3', $sortedCollection->getNode(2)->getName());
+        $this->assertSame('node4', $sortedCollection->getNode(3)->getName());
     }
 
     public function testSortDesc(): void
@@ -54,16 +47,9 @@ class SorterTest extends TestCase
 
         $sortedCollection = $sorter->sort($collection, new Desc());
 
-        $this->assertInstanceOf(Collection::class, $sortedCollection);
-
-        $maxWeight = 32;
-
-        foreach ($sortedCollection as $node) {
-            $weight = $node->getWeight();
-
-            $this->assertLessThanOrEqual($maxWeight, $weight);
-
-            $maxWeight = $weight;
-        }
+        $this->assertSame('node4', $sortedCollection->getNode(0)->getName());
+        $this->assertSame('node3', $sortedCollection->getNode(1)->getName());
+        $this->assertSame('node2', $sortedCollection->getNode(2)->getName());
+        $this->assertSame('node1', $sortedCollection->getNode(3)->getName());
     }
 }

@@ -4,7 +4,9 @@ namespace Orangesoft\Throttler\Tests\Collection;
 
 use PHPUnit\Framework\TestCase;
 use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 
 class CollectionSerializableTest extends TestCase
 {
@@ -23,12 +25,13 @@ class CollectionSerializableTest extends TestCase
 
         $this->assertIsString($serialized);
 
+        /** @var CollectionInterface $unserializedCollection */
         $unserializedCollection = unserialize($serialized);
 
-        $this->assertInstanceOf(Collection::class, $unserializedCollection);
+        $this->assertInstanceOf(CollectionInterface::class, $unserializedCollection);
 
         foreach ($unserializedCollection as $node) {
-            $this->assertInstanceOf(Node::class, $node);
+            $this->assertInstanceOf(NodeInterface::class, $node);
         }
     }
 }

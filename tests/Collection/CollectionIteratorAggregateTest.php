@@ -4,6 +4,7 @@ namespace Orangesoft\Throttler\Tests\Collection;
 
 use PHPUnit\Framework\TestCase;
 use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionIteratorAggregateTest extends TestCase
@@ -22,7 +23,7 @@ class CollectionIteratorAggregateTest extends TestCase
         $this->assertIsIterable($collection);
 
         foreach ($collection as $node) {
-            $this->assertInstanceOf(Node::class, $node);
+            $this->assertInstanceOf(NodeInterface::class, $node);
         }
     }
 }

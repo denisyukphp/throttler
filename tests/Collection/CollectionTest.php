@@ -8,24 +8,54 @@ use Orangesoft\Throttler\Collection\Collection;
 
 class CollectionTest extends TestCase
 {
-    public function testAdd(): void
+    public function testGetNode(): void
     {
-        $nodes = [
+        $collection = new Collection([
             new Node('node1'),
             new Node('node2'),
             new Node('node3'),
             new Node('node4'),
-        ];
+        ]);
 
-        $collection = new Collection($nodes);
+        $node = $collection->getNode(3);
 
-        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertSame('node4', $node->getName());
+    }
 
-        $this->assertNotEmpty($collection);
+    public function testAddNode(): void
+    {
+        $collection = new Collection();
 
-        foreach ($collection as $node) {
-            $this->assertInstanceOf(Node::class, $node);
-        }
+        $collection->addNode(new Node('node1'));
+        $collection->addNode(new Node('node2'));
+        $collection->addNode(new Node('node3'));
+        $collection->addNode(new Node('node4'));
+
+        $this->assertSame(4, $collection->getQuantity());
+    }
+
+    public function testHasNode(): void
+    {
+        $node = new Node('node1');
+
+        $collection = new Collection([
+            $node,
+        ]);
+
+        $this->assertTrue($collection->hasNode($node));
+    }
+
+    public function testRemoveNode(): void
+    {
+        $node = new Node('node1');
+
+        $collection = new Collection([
+            $node,
+        ]);
+
+        $collection->removeNode($node);
+
+        $this->assertFalse($collection->hasNode($node));
     }
 
     public function testEmpty(): void
@@ -61,5 +91,20 @@ class CollectionTest extends TestCase
         $collection = new Collection($nodes);
 
         $this->assertSame(4, $collection->getQuantity());
+    }
+
+    public function testToArray(): void
+    {
+        $nodes = [
+            new Node('node1'),
+            new Node('node2'),
+            new Node('node3'),
+            new Node('node4'),
+        ];
+
+        $collection = new Collection($nodes);
+
+        $this->assertIsArray($collection->toArray());
+        $this->assertCount(4, $collection->toArray());
     }
 }

@@ -10,11 +10,9 @@ class CollectionArrayAccessTest extends TestCase
 {
     public function testExists(): void
     {
-        $nodes = [
+        $collection = new Collection([
             new Node('node1'),
-        ];
-
-        $collection = new Collection($nodes);
+        ]);
 
         $this->assertTrue(isset($collection[0]));
     }
@@ -28,13 +26,13 @@ class CollectionArrayAccessTest extends TestCase
 
     public function testGet(): void
     {
-        $nodes = [
+        $collection = new Collection([
             new Node('node1'),
-        ];
+        ]);
 
-        $collection = new Collection($nodes);
+        $node = $collection[0];
 
-        $this->assertSame('node1', $collection[0]->getName());
+        $this->assertSame('node1', $node->getName());
     }
 
     public function testGetNotExists(): void
@@ -55,16 +53,7 @@ class CollectionArrayAccessTest extends TestCase
         $this->assertCount(1, $collection);
     }
 
-    public function testSetWithKey(): void
-    {
-        $collection = new Collection();
-
-        $collection[0] = new Node('node1');
-
-        $this->assertNotEmpty($collection);
-    }
-
-    public function testWrongKey(): void
+    public function testSetStringKey(): void
     {
         $collection = new Collection();
 
@@ -73,22 +62,20 @@ class CollectionArrayAccessTest extends TestCase
         $collection['key'] = new Node('node1');
     }
 
-    public function testWrongValue(): void
+    public function testSetIntegerKey(): void
     {
         $collection = new Collection();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\OutOfBoundsException::class);
 
-        $collection[] = 'node1';
+        $collection[0] = new Node('node1');
     }
 
     public function testUnset(): void
     {
-        $nodes = [
+        $collection = new Collection([
             new Node('node1'),
-        ];
-
-        $collection = new Collection($nodes);
+        ]);
 
         unset($collection[0]);
 
