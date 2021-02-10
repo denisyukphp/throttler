@@ -12,7 +12,7 @@ class Collection implements CollectionInterface
     /**
      * @param iterable|NodeInterface[] $nodes
      */
-    public function __construct(iterable $nodes)
+    public function __construct(iterable $nodes = [])
     {
         $this->splObjectStorage = new \SplObjectStorage();
 
