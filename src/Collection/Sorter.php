@@ -10,7 +10,7 @@ class Sorter
      *
      * @return Collection
      */
-    public function sort(CollectionInterface $collection, ComparatorInterface $comparator): Collection
+    public function sort(CollectionInterface $collection, ComparatorInterface $comparator): CollectionInterface
     {
         $nodes = $collection->toArray();
 
