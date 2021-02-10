@@ -174,6 +174,7 @@ class Collection implements CollectionInterface
         $this->splObjectStorage = unserialize($serialized, [
             'allowed_classes' => [
                 \SplObjectStorage::class,
+                Node::class,
             ],
         ]);
     }
