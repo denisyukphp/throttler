@@ -2,7 +2,7 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-interface Counter
+interface CounterInterface
 {
     /**
      * @param string $key

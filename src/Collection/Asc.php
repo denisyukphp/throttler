@@ -2,15 +2,15 @@
 
 namespace Orangesoft\Throttler\Collection;
 
-class Asc implements Comparator
+class Asc implements ComparatorInterface
 {
     /**
-     * @param Node $a
-     * @param Node $b
+     * @param NodeInterface $a
+     * @param NodeInterface $b
      *
      * @return int
      */
-    public function __invoke(Node $a, Node $b): int
+    public function __invoke(NodeInterface $a, NodeInterface $b): int
     {
         return $a->getWeight() - $b->getWeight();
     }

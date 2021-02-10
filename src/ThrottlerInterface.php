@@ -2,12 +2,12 @@
 
 namespace Orangesoft\Throttler;
 
-use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
 
 interface ThrottlerInterface
 {
     /**
-     * @return Node
+     * @return NodeInterface
      */
-    public function next(): Node;
+    public function next(): NodeInterface;
 }

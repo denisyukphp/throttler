@@ -2,21 +2,107 @@
 
 namespace Orangesoft\Throttler\Collection;
 
-class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAggregate
+class Collection implements CollectionInterface
 {
     /**
-     * @var Node[]
+     * @var \SplObjectStorage
      */
-    protected $nodes = [];
+    private $splObjectStorage;
 
     /**
-     * @param iterable|Node[] $nodes
+     * @param iterable|NodeInterface[] $nodes
      */
-    public function __construct(iterable $nodes = [])
+    public function __construct(iterable $nodes)
     {
-        foreach ($nodes as $index => $node) {
-            $this[$index] = $node;
+        $this->splObjectStorage = new \SplObjectStorage();
+
+        foreach ($nodes as $node) {
+            $this->addNode($node);
         }
+    }
+
+    /**
+     * @param int $index
+     *
+     * @return object|NodeInterface
+     *
+     * @throws \OutOfRangeException
+     */
+    public function getNode(int $index): NodeInterface
+    {
+        if (!$this->isValidIndex($index)) {
+            throw new \OutOfRangeException(
+                sprintf('Undefined index %d', $index)
+            );
+        }
+
+        $this->splObjectStorage->rewind();
+
+        while ($index--) {
+            $this->splObjectStorage->next();
+        }
+
+        return $this->splObjectStorage->current();
+    }
+
+    /**
+     * @param int $index
+     *
+     * @return bool
+     */
+    private function isValidIndex(int $index): bool
+    {
+        return $index < $this->getQuantity();
+    }
+
+    /**
+     * @param NodeInterface $node
+     */
+    public function addNode(NodeInterface $node): void
+    {
+        $this->splObjectStorage->attach($node);
+    }
+
+    /**
+     * @param NodeInterface $node
+     *
+     * @return bool
+     */
+    public function hasNode(NodeInterface $node): bool
+    {
+        return $this->splObjectStorage->contains($node);
+    }
+
+    /**
+     * @param NodeInterface $node
+     */
+    public function removeNode(NodeInterface $node): void
+    {
+        $this->splObjectStorage->detach($node);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return 0 === $this->getQuantity();
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity(): int
+    {
+        return $this->splObjectStorage->count();
+    }
+
+    /**
+     * @return NodeInterface[]
+     */
+    public function toArray(): array
+    {
+        return iterator_to_array($this->splObjectStorage, false);
     }
 
     /**
@@ -26,49 +112,32 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function offsetExists($index): bool
     {
-        return isset($this->nodes[$index]);
+        return $this->isValidIndex($index);
     }
 
     /**
      * @param int $index
      *
-     * @return Node
-     *
-     * @throws \OutOfRangeException
+     * @return NodeInterface
      */
-    public function offsetGet($index): Node
+    public function offsetGet($index): NodeInterface
     {
-        if (!$this->offsetExists($index)) {
-            throw new \OutOfRangeException(
-                sprintf('Undefined index %d', $index)
-            );
-        }
-
-        return $this->nodes[$index];
+        return $this->getNode($index);
     }
 
     /**
-     * @param int|null $index
-     * @param Node $node
+     * @param null $index
+     * @param NodeInterface $node
      *
-     * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
      */
     public function offsetSet($index, $node): void
     {
-        if (!$node instanceof Node) {
-            throw new \InvalidArgumentException(
-                sprintf('Node must be of type %s', Node::class)
-            );
+        if (null !== $index) {
+            throw new \OutOfBoundsException('Index cannot be set');
         }
 
-        if (is_int($index)) {
-            $this->nodes[$index] = $node;
-        } elseif (is_null($index)) {
-            $this->nodes[] = $node;
-        } else {
-            throw new \OutOfBoundsException('Index must be integer or null');
-        }
+        $this->addNode($node);
     }
 
     /**
@@ -76,23 +145,9 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function offsetUnset($index): void
     {
-        unset($this->nodes[$index]);
-    }
+        $node = $this->getNode($index);
 
-    /**
-     * @return bool
-     */
-    public function isEmpty(): bool
-    {
-        return empty($this->nodes);
-    }
-
-    /**
-     * @return int
-     */
-    public function getQuantity(): int
-    {
-        return $this->count();
+        $this->removeNode($node);
     }
 
     /**
@@ -100,7 +155,7 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function count(): int
     {
-        return count($this->nodes);
+        return $this->getQuantity();
     }
 
     /**
@@ -108,7 +163,7 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function serialize(): string
     {
-        return serialize($this->nodes);
+        return serialize($this->splObjectStorage);
     }
 
     /**
@@ -116,18 +171,20 @@ class Collection implements \ArrayAccess, \Countable, \Serializable, \IteratorAg
      */
     public function unserialize($serialized): void
     {
-        $this->nodes = unserialize($serialized, [
+        $this->splObjectStorage = unserialize($serialized, [
             'allowed_classes' => [
-                Node::class,
+                \SplObjectStorage::class,
             ],
         ]);
     }
 
     /**
-     * @return \ArrayIterator|Node[]
+     * @return \ArrayIterator|NodeInterface[]
      */
     public function getIterator(): \ArrayIterator
     {
-        return new \ArrayIterator($this->nodes);
+        $nodes = $this->toArray();
+
+        return new \ArrayIterator($nodes);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Exception\NotWeightedCollectionException;
 
-class WeightedRandomStrategy implements Strategy
+class WeightedRandomStrategy implements StrategyInterface
 {
     /**
      * @var int
@@ -13,13 +13,13 @@ class WeightedRandomStrategy implements Strategy
     private $sumWeight = 0;
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      *
      * @throws NotWeightedCollectionException
      */
-    public function getIndex(Collection $collection): int
+    public function getIndex(CollectionInterface $collection): int
     {
         $currentWeight = 0;
 
@@ -43,11 +43,11 @@ class WeightedRandomStrategy implements Strategy
     }
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      */
-    private function getSumWeight(Collection $collection): int
+    private function getSumWeight(CollectionInterface $collection): int
     {
         if (!$this->sumWeight) {
             foreach ($collection as $node) {

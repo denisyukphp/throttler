@@ -2,29 +2,29 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 
-class RoundRobinStrategy implements Strategy
+class RoundRobinStrategy implements StrategyInterface
 {
     /**
-     * @var Counter
+     * @var CounterInterface
      */
     protected $counter;
 
     /**
-     * @param Counter $counter
+     * @param CounterInterface $counter
      */
-    public function __construct(Counter $counter)
+    public function __construct(CounterInterface $counter)
     {
         $this->counter = $counter;
     }
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      */
-    public function getIndex(Collection $collection): int
+    public function getIndex(CollectionInterface $collection): int
     {
         return $this->counter->increment() % $collection->getQuantity();
     }

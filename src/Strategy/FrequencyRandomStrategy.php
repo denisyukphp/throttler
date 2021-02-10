@@ -2,9 +2,9 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 
-class FrequencyRandomStrategy implements Strategy
+class FrequencyRandomStrategy implements StrategyInterface
 {
     /**
      * @var int
@@ -26,11 +26,11 @@ class FrequencyRandomStrategy implements Strategy
     }
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      */
-    public function getIndex(Collection $collection): int
+    public function getIndex(CollectionInterface $collection): int
     {
         $quantity = $collection->getQuantity();
 

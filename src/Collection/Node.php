@@ -2,7 +2,7 @@
 
 namespace Orangesoft\Throttler\Collection;
 
-class Node
+class Node implements NodeInterface
 {
     /**
      * @var string

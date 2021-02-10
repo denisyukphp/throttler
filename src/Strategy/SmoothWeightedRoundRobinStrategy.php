@@ -2,9 +2,9 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 
-class SmoothWeightedRoundRobinStrategy extends ObjectSerializable implements Strategy
+class SmoothWeightedRoundRobinStrategy extends ObjectSerializable implements StrategyInterface
 {
     /**
      * @var int[]
@@ -16,11 +16,11 @@ class SmoothWeightedRoundRobinStrategy extends ObjectSerializable implements Str
     protected $currentWeight;
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      */
-    public function getIndex(Collection $collection): int
+    public function getIndex(CollectionInterface $collection): int
     {
         if (!$this->weight || !$this->currentWeight) {
             foreach ($collection as $index => $node) {

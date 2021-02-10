@@ -2,38 +2,38 @@
 
 namespace Orangesoft\Throttler;
 
-use Orangesoft\Throttler\Strategy\Strategy;
-use Orangesoft\Throttler\Collection\Collection;
-use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Strategy\StrategyInterface;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 
 final class Throttler implements ThrottlerInterface
 {
     /**
-     * @var Collection
+     * @var CollectionInterface
      */
     private $collection;
     /**
-     * @var Strategy
+     * @var StrategyInterface
      */
     private $strategy;
 
     /**
-     * @param Collection $collection
-     * @param Strategy $strategy
+     * @param CollectionInterface $collection
+     * @param StrategyInterface $strategy
      */
-    public function __construct(Collection $collection, Strategy $strategy)
+    public function __construct(CollectionInterface $collection, StrategyInterface $strategy)
     {
         $this->collection = $collection;
         $this->strategy = $strategy;
     }
 
     /**
-     * @return Node
+     * @return NodeInterface
      *
      * @throws EmptyCollectionException
      */
-    public function next(): Node
+    public function next(): NodeInterface
     {
         if ($this->collection->isEmpty()) {
             throw new EmptyCollectionException('Collection of nodes should not be empty');
@@ -41,6 +41,6 @@ final class Throttler implements ThrottlerInterface
 
         $index = $this->strategy->getIndex($this->collection);
 
-        return $this->collection[$index];
+        return $this->collection->getNode($index);
     }
 }

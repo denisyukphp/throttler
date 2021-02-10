@@ -2,15 +2,15 @@
 
 namespace Orangesoft\Throttler\Collection;
 
-class Desc implements Comparator
+class Desc implements ComparatorInterface
 {
     /**
-     * @param Node $a
-     * @param Node $b
+     * @param NodeInterface $a
+     * @param NodeInterface $b
      *
      * @return int
      */
-    public function __invoke(Node $a, Node $b): int
+    public function __invoke(NodeInterface $a, NodeInterface $b): int
     {
         return $b->getWeight() - $a->getWeight();
     }

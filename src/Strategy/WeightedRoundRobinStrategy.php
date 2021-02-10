@@ -2,13 +2,13 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Exception\NotWeightedCollectionException;
 
-class WeightedRoundRobinStrategy implements Strategy
+class WeightedRoundRobinStrategy implements StrategyInterface
 {
     /**
-     * @var Counter
+     * @var CounterInterface
      */
     protected $counter;
     /**
@@ -25,21 +25,21 @@ class WeightedRoundRobinStrategy implements Strategy
     private $gcd = 0;
 
     /**
-     * @param Counter $counter
+     * @param CounterInterface $counter
      */
-    public function __construct(Counter $counter)
+    public function __construct(CounterInterface $counter)
     {
         $this->counter = $counter;
     }
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      *
      * @throws NotWeightedCollectionException
      */
-    public function getIndex(Collection $collection): int
+    public function getIndex(CollectionInterface $collection): int
     {
         $maxWeight = $this->getMaxWeight($collection);
         $gcd = $this->getGreatestCommonDivisor($collection);
@@ -59,7 +59,7 @@ class WeightedRoundRobinStrategy implements Strategy
                 }
             }
 
-            $node = $collection[$index];
+            $node = $collection->getNode($index);
 
             if ($node->getWeight() >= $this->currentWeight) {
                 return $index;
@@ -70,11 +70,11 @@ class WeightedRoundRobinStrategy implements Strategy
     }
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      */
-    private function getMaxWeight(Collection $collection): int
+    private function getMaxWeight(CollectionInterface $collection): int
     {
         if (!$this->maxWeight) {
             foreach ($collection as $node) {
@@ -88,11 +88,11 @@ class WeightedRoundRobinStrategy implements Strategy
     }
 
     /**
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
      * @return int
      */
-    private function getGreatestCommonDivisor(Collection $collection): int
+    private function getGreatestCommonDivisor(CollectionInterface $collection): int
     {
         if (!$this->gcd) {
             foreach ($collection as $node) {

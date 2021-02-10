@@ -2,7 +2,7 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-class InMemoryCounter implements Counter
+class InMemoryCounter implements CounterInterface
 {
     /**
      * @var int
