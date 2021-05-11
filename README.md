@@ -62,19 +62,19 @@ Set weight for Node as the second argument in constructor if you are using weigh
 Run `composer bench` to check out strategies benchmarks:
 
 ```text
-+-------------------------------+------+-----+---------+-------+-------+--------+-------+
-| benchmark                     | revs | its | mean    | min   | max   | sum    | diff  |
-+-------------------------------+------+-----+---------+-------+-------+--------+-------+
-| RandomBench                   | 1000 | 5   | 1.003μs | 0.963 | 1.034 | 5.014  | 1.00x |
-| WeightedRandomBench           | 1000 | 5   | 2.524μs | 2.337 | 2.739 | 12.62  | 2.52x |
-| FrequencyRandomBench          | 1000 | 5   | 1.778μs | 1.727 | 1.829 | 8.889  | 1.77x |
-| RoundRobinBench               | 1000 | 5   | 1.028μs | 0.982 | 1.073 | 5.139  | 1.02x |
-| WeightedRoundRobinBench       | 1000 | 5   | 2.609μs | 2.525 | 2.668 | 13.046 | 2.60x |
-| SmoothWeightedRoundRobinBench | 1000 | 5   | 1.882μs | 1.803 | 1.984 | 9.408  | 1.88x |
-+-------------------------------+------+-----+---------+-------+-------+--------+-------+
++-------------------------------+------+-----+----------+----------+----------+---------+
+| benchmark                     | revs | its | mean     | best     | worst    | stdev   |
++-------------------------------+------+-----+----------+----------+----------+---------+
+| RandomBench                   | 1000 | 5   | 4.002μs  | 3.880μs  | 4.097μs  | 0.073μs |
+| WeightedRandomBench           | 1000 | 5   | 11.660μs | 11.533μs | 11.797μs | 0.094μs |
+| FrequencyRandomBench          | 1000 | 5   | 6.074μs  | 5.924μs  | 6.242μs  | 0.139μs |
+| RoundRobinBench               | 1000 | 5   | 4.060μs  | 3.888μs  | 4.363μs  | 0.171μs |
+| WeightedRoundRobinBench       | 1000 | 5   | 10.778μs | 10.655μs | 10.919μs | 0.115μs |
+| SmoothWeightedRoundRobinBench | 1000 | 5   | 6.888μs  | 6.707μs  | 7.102μs  | 0.130μs |
++-------------------------------+------+-----+----------+----------+----------+---------+
 ```
 
-The report is based on measuring the speed. Check `diff` column to find out which strategy is the fastest. You can see that the fastest strategies are Random and RoundRobin.
+The report is based on measuring the speed. Check `best` column to find out which strategy is the fastest. You can see that the fastest strategies are Random and RoundRobin.
 
 ## Documentation
 

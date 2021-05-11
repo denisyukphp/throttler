@@ -1,13 +1,13 @@
 {
-    "bootstrap": "./vendor/autoload.php",
-    "path": "./benchmarks/",
-    "progress": "dots",
-    "reports": {
+    "runner.bootstrap": "./vendor/autoload.php",
+    "runner.path": "./benchmarks/",
+    "runner.progress": "dots",
+    "report.generators": {
         "speed": {
             "extends": "aggregate",
             "title": "Throttler benchmarks",
             "description": "How long strategies take to load balancing",
-            "cols": ["benchmark", "revs", "its", "mean", "min", "max", "sum", "diff"]
+            "cols": ["benchmark", "revs", "its", "mean", "best", "worst", "stdev"]
         }
     }
 }
