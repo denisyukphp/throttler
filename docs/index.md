@@ -1,13 +1,12 @@
 # Documentation
 
-- [Configuration](#configuration)
+- [Configure Throttler](#configure-throttler)
 - [Available strategies](#available-strategies)
 - [Sort nodes](#sort-nodes)
 - [Keep counter](#keep-counter)
 - [Serialize strategies](#serialize-strategies)
-- [Supported tools](#supported-tools)
 
-## Configuration
+## Configure Throttler
 
 You need to collect a collection of nodes and choose a strategy. Set weight for Node as the second argument in constructor if you are using weighted-strategies:
 
@@ -36,7 +35,7 @@ $strategy = new WeightedRoundRobinStrategy(
 $throttler = new Throttler($collection, $strategy);
 ```
 
-To use Throttler just call the `next()` method.
+To get next Node call the `next()` method:
 
 ```php
 while (true) {
@@ -64,7 +63,7 @@ As a result, you will see the following distribution of nodes:
 +-------+
 ```
 
-Thtottler's result depends on the chosen strategy.
+Result of Throttler depends on the chosen strategy.
 
 ## Available strategies
 
@@ -79,7 +78,7 @@ Strategies are divided into two types: random and round-robin. The following str
 
 ## Sort nodes
 
-For some strategies, such as [FrequencyRandomStrategy](../src/Strategy/FrequencyRandomStrategy.php), it may be necessary to adjust the order of nodes by their weight. This can be done with Sorter:
+For some strategies, such as [FrequencyRandomStrategy](../src/Strategy/FrequencyRandomStrategy.php), it might be necessary to adjust the order of nodes by their weight. This can be done with Sorter:
 
 ```php
 <?php
@@ -112,7 +111,7 @@ $sorter = new Sorter();
 $sortedCollection = $sorter->sort($collection, new Desc());
 ```
 
-The nodes at the top of the list should be used more often. You can manage sorting using [Asc](../src/Collection/Asc.php) and [Desc](../src/Collection/Desc.php) comparators. Example for the Desc direction:
+The nodes at the top of the list will be used more often. You can manage sorting using [Asc](../src/Collection/Asc.php) and [Desc](../src/Collection/Desc.php) comparators. Example for the Desc direction:
 
 ```text
 +--------+--------+
@@ -131,7 +130,7 @@ The nodes at the top of the list should be used more often. You can manage sorti
 +--------+--------+
 ```
 
-FrequencyRandomStrategy has 2 not required options: frequency is probability to choose nodes from a first group in percent, depth is length the first group from the list in percent. By default frequency is 80 and depth is 20.
+FrequencyRandomStrategy has 2 not required options: frequency and depth. Frequency is probability to choose nodes from a first group in percent. Depth is length the first group from the list in percent. By default frequency is 80 and depth is 20.
 
 ```php
 $frequency = 80;
@@ -243,22 +242,3 @@ $strategy = unserialize($serialized);
 ```
 
 This way you can preserve the order of nodes for a given strategy between PHP calls.
-
-## Supported tools
-
-The table below shows which tools each strategy supports:
-
-```text
-+----------------------------------+-----------+-----------+-----------+
-|                                  | Sort      | Counter   | Serialize |
-+----------------------------------+-----------+-----------+-----------+
-| RandomStrategy                   | No        | No        | No        |
-| WeightedRandomStrategy           | No        | No        | No        |
-| FrequencyRandomStrategy          | Yes       | No        | No        |
-| RoundRobinStrategy               | No        | Yes       | No        |
-| WeightedRoundRobinStrategy       | No        | Yes       | No        |
-| SmoothWeightedRoundRobinStrategy | No        | No        | Yes       |
-+----------------------------------+-----------+-----------+-----------+
-```
-
-To implement your strategy in Throttler you need to implement [StrategyInterface](../src/Strategy/StrategyInterface.php).
