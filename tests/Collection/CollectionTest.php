@@ -34,6 +34,28 @@ class CollectionTest extends TestCase
         $this->assertSame(4, $collection->getQuantity());
     }
 
+    public function testWeightedCollection(): void
+    {
+        $collection = new Collection([
+            new Node('node1', 5),
+            new Node('node2', 1),
+            new Node('node3', 1),
+        ]);
+
+        $this->assertTrue($collection->isWeighted());
+    }
+
+    public function testUnweightedCollection(): void
+    {
+        $collection = new Collection([
+            new Node('node1', 5),
+            new Node('node2', 0),
+            new Node('node3', 0),
+        ]);
+
+        $this->assertFalse($collection->isWeighted());
+    }
+
     public function testHasNode(): void
     {
         $node = new Node('node1');
