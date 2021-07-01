@@ -2,12 +2,16 @@
 
 namespace Orangesoft\Throttler\Collection;
 
-class Collection implements CollectionInterface
+final class Collection implements CollectionInterface
 {
     /**
      * @var \SplObjectStorage
      */
     private $splObjectStorage;
+    /**
+     * @var bool
+     */
+    private $isWeighted;
 
     /**
      * @param iterable|NodeInterface[] $nodes
@@ -15,6 +19,7 @@ class Collection implements CollectionInterface
     public function __construct(iterable $nodes = [])
     {
         $this->splObjectStorage = new \SplObjectStorage();
+        $this->isWeighted = true;
 
         foreach ($nodes as $node) {
             $this->addNode($node);
@@ -45,53 +50,40 @@ class Collection implements CollectionInterface
         return $this->splObjectStorage->current();
     }
 
-    /**
-     * @param int $index
-     *
-     * @return bool
-     */
     private function isValidIndex(int $index): bool
     {
         return $index < $this->getQuantity();
     }
 
-    /**
-     * @param NodeInterface $node
-     */
     public function addNode(NodeInterface $node): void
     {
+        if (0 === $node->getWeight()) {
+            $this->isWeighted = false;
+        }
+
         $this->splObjectStorage->attach($node);
     }
 
-    /**
-     * @param NodeInterface $node
-     *
-     * @return bool
-     */
     public function hasNode(NodeInterface $node): bool
     {
         return $this->splObjectStorage->contains($node);
     }
 
-    /**
-     * @param NodeInterface $node
-     */
     public function removeNode(NodeInterface $node): void
     {
         $this->splObjectStorage->detach($node);
     }
 
-    /**
-     * @return bool
-     */
+    public function isWeighted(): bool
+    {
+        return $this->isWeighted;
+    }
+
     public function isEmpty(): bool
     {
         return 0 === $this->getQuantity();
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return $this->splObjectStorage->count();
@@ -134,7 +126,7 @@ class Collection implements CollectionInterface
     public function offsetSet($index, $node): void
     {
         if (null !== $index) {
-            throw new \OutOfBoundsException('Index cannot be set');
+            throw new \OutOfBoundsException('Index cannot be set at all');
         }
 
         $this->addNode($node);
@@ -150,17 +142,11 @@ class Collection implements CollectionInterface
         $this->removeNode($node);
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return $this->getQuantity();
     }
 
-    /**
-     * @return string
-     */
     public function serialize(): string
     {
         return serialize($this->splObjectStorage);

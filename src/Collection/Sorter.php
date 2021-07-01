@@ -2,14 +2,8 @@
 
 namespace Orangesoft\Throttler\Collection;
 
-class Sorter
+final class Sorter
 {
-    /**
-     * @param CollectionInterface $collection
-     * @param ComparatorInterface $comparator
-     *
-     * @return Collection
-     */
     public function sort(CollectionInterface $collection, ComparatorInterface $comparator): CollectionInterface
     {
         $nodes = $collection->toArray();

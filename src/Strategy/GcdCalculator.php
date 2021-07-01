@@ -2,14 +2,8 @@
 
 namespace Orangesoft\Throttler\Strategy;
 
-class GcdCalculator
+final class GcdCalculator
 {
-    /**
-     * @param int $a
-     * @param int $b
-     *
-     * @return int
-     */
     public static function calculate(int $a, int $b): int
     {
         while (0 !== $b) {

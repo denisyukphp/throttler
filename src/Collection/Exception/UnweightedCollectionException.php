@@ -2,6 +2,6 @@
 
 namespace Orangesoft\Throttler\Collection\Exception;
 
-class NotWeightedCollectionException extends \LogicException
+class UnweightedCollectionException extends \LogicException
 {
 }

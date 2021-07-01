@@ -18,25 +18,16 @@ final class Throttler implements ThrottlerInterface
      */
     private $strategy;
 
-    /**
-     * @param CollectionInterface $collection
-     * @param StrategyInterface $strategy
-     */
     public function __construct(CollectionInterface $collection, StrategyInterface $strategy)
     {
         $this->collection = $collection;
         $this->strategy = $strategy;
     }
 
-    /**
-     * @return NodeInterface
-     *
-     * @throws EmptyCollectionException
-     */
     public function next(): NodeInterface
     {
         if ($this->collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes should not be empty');
+            throw new EmptyCollectionException('Collection of nodes must not be empty');
         }
 
         $index = $this->strategy->getIndex($this->collection);

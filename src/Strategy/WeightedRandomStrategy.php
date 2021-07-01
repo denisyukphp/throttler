@@ -3,9 +3,10 @@
 namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\Exception\NotWeightedCollectionException;
+use Orangesoft\Throttler\Collection\NodeInterface;
+use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 
-class WeightedRandomStrategy implements StrategyInterface
+final class WeightedRandomStrategy implements StrategyInterface
 {
     /**
      * @var int
@@ -13,28 +14,28 @@ class WeightedRandomStrategy implements StrategyInterface
     private $sumWeight = 0;
 
     /**
-     * @param CollectionInterface $collection
+     * @param CollectionInterface|NodeInterface[] $collection
      *
      * @return int
-     *
-     * @throws NotWeightedCollectionException
      */
     public function getIndex(CollectionInterface $collection): int
     {
-        $currentWeight = 0;
-
-        $sumWeight = $this->getSumWeight($collection);
-
-        if (0 === $sumWeight) {
-            throw new NotWeightedCollectionException('Add at least one weighted node to collection');
+        if (!$collection->isWeighted()) {
+            throw new UnweightedCollectionException('All nodes in the collection must be weighted');
         }
 
-        $offset = mt_rand(1, $sumWeight);
+        $currentWeight = 0;
+
+        if (0 === $this->sumWeight) {
+            $this->sumWeight = $this->calculateSumWeight($collection);
+        }
+
+        $randomWeight = mt_rand(1, $this->sumWeight);
 
         foreach ($collection as $index => $node) {
             $currentWeight += $node->getWeight();
 
-            if ($offset <= $currentWeight) {
+            if ($randomWeight <= $currentWeight) {
                 return $index;
             }
         }
@@ -43,18 +44,18 @@ class WeightedRandomStrategy implements StrategyInterface
     }
 
     /**
-     * @param CollectionInterface $collection
+     * @param CollectionInterface|NodeInterface[] $collection
      *
      * @return int
      */
-    private function getSumWeight(CollectionInterface $collection): int
+    private function calculateSumWeight(CollectionInterface $collection): int
     {
-        if (!$this->sumWeight) {
-            foreach ($collection as $node) {
-                $this->sumWeight += $node->getWeight();
-            }
+        $sumWeight = 0;
+
+        foreach ($collection as $node) {
+            $sumWeight += $node->getWeight();
         }
 
-        return $this->sumWeight;
+        return $sumWeight;
     }
 }

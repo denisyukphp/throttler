@@ -12,6 +12,8 @@ interface CollectionInterface extends \ArrayAccess, \Countable, \Serializable, \
 
     public function removeNode(NodeInterface $node): void;
 
+    public function isWeighted(): bool;
+
     public function isEmpty(): bool;
 
     public function getQuantity(): int;

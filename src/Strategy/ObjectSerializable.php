@@ -4,9 +4,6 @@ namespace Orangesoft\Throttler\Strategy;
 
 abstract class ObjectSerializable implements \Serializable
 {
-    /**
-     * @return string
-     */
     public function serialize(): string
     {
         $vars = get_object_vars($this);

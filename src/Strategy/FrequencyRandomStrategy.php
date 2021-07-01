@@ -4,71 +4,35 @@ namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
 
-class FrequencyRandomStrategy implements StrategyInterface
+final class FrequencyRandomStrategy implements StrategyInterface
 {
     /**
      * @var int
      */
-    protected $frequency;
+    private $frequency;
     /**
      * @var int
      */
-    protected $depth;
+    private $depth;
 
-    /**
-     * @param int $frequency
-     * @param int $depth
-     */
     public function __construct(int $frequency = 80, int $depth = 20)
     {
         $this->frequency = $frequency;
         $this->depth = $depth;
     }
 
-    /**
-     * @param CollectionInterface $collection
-     *
-     * @return int
-     */
     public function getIndex(CollectionInterface $collection): int
     {
-        $quantity = $collection->getQuantity();
+        $total = $collection->getQuantity();
 
-        $offset = $this->getOffset($this->depth, $quantity);
-        $nextOffset = $this->getNextOffset($offset, $quantity);
+        $lowOffset = ceil($this->depth * ($total / 100));
+        $highOffset = $lowOffset + ((1 < $total) ? 1 : 0);
 
-        $index = $this->isChance($this->frequency) ? mt_rand(1, $offset) : mt_rand($nextOffset, $quantity);
+        $index = $this->isChance($this->frequency) ? mt_rand(1, $lowOffset) : mt_rand($highOffset, $total);
 
         return $index - 1;
     }
 
-    /**
-     * @param int $depth
-     * @param int $quantity
-     *
-     * @return int
-     */
-    private function getOffset(int $depth, int $quantity): int
-    {
-        return ceil($depth * ($quantity / 100));
-    }
-
-    /**
-     * @param int $offset
-     * @param int $quantity
-     *
-     * @return int
-     */
-    private function getNextOffset(int $offset, int $quantity): int
-    {
-        return $offset + ((1 < $quantity) ? 1 : 0);
-    }
-
-    /**
-     * @param int $frequency
-     *
-     * @return bool
-     */
     private function isChance(int $frequency): bool
     {
         return $frequency >= mt_rand(1, 100);
