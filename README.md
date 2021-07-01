@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
 [![License](https://img.shields.io/packagist/l/orangesoft/throttler?style=plastic&color=428F7E)](https://packagist.org/packages/orangesoft/throttler)
 
-Throttler is the load balancer between nodes.
+Load balancer between nodes.
 
 ## Installation
 
@@ -78,11 +78,10 @@ The report is based on measuring the speed. Check `best` column to find out whic
 
 ## Documentation
 
-- [Configuration](docs/index.md#configuration)
+- [Configure Throttler](docs/index.md#configure-throttler)
 - [Available strategies](docs/index.md#available-strategies)
 - [Sort nodes](docs/index.md#sort-nodes)
 - [Keep counter](docs/index.md#keep-counter)
 - [Serialize strategies](docs/index.md#serialize-strategies)
-- [Supported tools](docs/index.md#supported-tools)
 
 Read more about usage on [Orangesoft Tech](https://orangesoft.co/blog/how-to-make-proxy-balancing-in-guzzle).
