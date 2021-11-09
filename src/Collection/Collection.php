@@ -11,7 +11,7 @@ final class Collection implements CollectionInterface
     /**
      * @var bool
      */
-    private $isWeighted;
+    private $isWeighted = true;
 
     /**
      * @param iterable|NodeInterface[] $nodes
@@ -19,7 +19,6 @@ final class Collection implements CollectionInterface
     public function __construct(iterable $nodes = [])
     {
         $this->splObjectStorage = new \SplObjectStorage();
-        $this->isWeighted = true;
 
         foreach ($nodes as $node) {
             $this->addNode($node);
