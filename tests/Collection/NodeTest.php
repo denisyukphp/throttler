@@ -9,9 +9,10 @@ class NodeTest extends TestCase
 {
     public function testNode(): void
     {
-        $node = new Node('node1', 4);
+        $node = new Node('node1', 4, ['a' => 'b']);
 
         $this->assertSame('node1', $node->getName());
         $this->assertSame(4, $node->getWeight());
+        $this->assertSame('b', $node->getInfo()['a']);
     }
 }
