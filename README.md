@@ -46,7 +46,7 @@ $collection = new Collection([
 
 while (true) {
     /** @var NodeInterface $node */
-    $node = $throttler->next($collection);
+    $node = $throttler->pick($collection);
     
     // ...
 }
