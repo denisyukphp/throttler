@@ -1,9 +1,9 @@
 <?php
 
-namespace Orangesoft\Throttler\Tests\Strategy;
+namespace Strategy;
 
-use PHPUnit\Framework\TestCase;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use PHPUnit\Framework\TestCase;
 
 class InMemoryCounterTest extends TestCase
 {

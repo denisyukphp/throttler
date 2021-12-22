@@ -1,11 +1,11 @@
 <?php
 
-namespace Orangesoft\Throttler\Tests\Strategy;
+namespace Strategy;
 
-use PHPUnit\Framework\TestCase;
-use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Strategy\FrequencyRandomStrategy;
+use PHPUnit\Framework\TestCase;
 
 class FrequencyRandomStrategyTest extends TestCase
 {

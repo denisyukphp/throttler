@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Strategy;
 
 interface CounterInterface
 {
-    public function increment(string $key = 'default'): int;
+    public function next(string $name = 'default'): int;
 }

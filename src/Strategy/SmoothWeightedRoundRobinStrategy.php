@@ -1,34 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\NodeInterface;
+use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 
-final class SmoothWeightedRoundRobinStrategy extends ObjectSerializable implements StrategyInterface
+final class SmoothWeightedRoundRobinStrategy implements StrategyInterface
 {
     /**
-     * @var int[]
+     * @var array<int, int>
      */
-    protected $weights = [];
+    private array $weights = [];
     /**
-     * @var int[]
+     * @var array<int, int>
      */
-    protected $currentWeights = [];
+    private array $currentWeights = [];
 
-    /**
-     * @param CollectionInterface|NodeInterface[] $collection
-     *
-     * @return int
-     */
-    public function getIndex(CollectionInterface $collection): int
+    public function getIndex(CollectionInterface $collection, array $context = []): int
     {
+        if ($collection->isEmpty()) {
+            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+        }
+
         if (!$collection->isWeighted()) {
-            throw new UnweightedCollectionException('All nodes in the collection must be weighted');
+            throw new UnweightedCollectionException('All nodes in the collection must be weighted.');
         }
 
         if (0 === count($this->weights) || 0 === count($this->currentWeights)) {
+            /** @var array<int, NodeInterface> $collection */
             foreach ($collection as $index => $node) {
                 $this->weights[$index] = $this->currentWeights[$index] = $node->getWeight();
             }
@@ -45,10 +48,8 @@ final class SmoothWeightedRoundRobinStrategy extends ObjectSerializable implemen
     {
         $maxCurrentWeight = max($this->currentWeights);
 
-        $index = array_search($maxCurrentWeight, $this->currentWeights, true);
-
-        if (false === $index) {
-            throw new \LogicException('Cannot find max current weight index');
+        if (false === $index = array_search($maxCurrentWeight, $this->currentWeights, true)) {
+            throw new \LogicException('Cannot find max current weight index.');
         }
 
         return $index;
@@ -56,17 +57,12 @@ final class SmoothWeightedRoundRobinStrategy extends ObjectSerializable implemen
 
     private function recalculateCurrentWeights(int $maxCurrentWeightIndex): void
     {
-        $recalculatedCurrentWeight = $this->currentWeights[$maxCurrentWeightIndex] - $this->calculateSumWeight();
+        $recalculatedCurrentWeight = $this->currentWeights[$maxCurrentWeightIndex] - array_sum($this->weights);
 
         $this->currentWeights[$maxCurrentWeightIndex] = $recalculatedCurrentWeight;
 
         foreach ($this->weights as $index => $weight) {
             $this->currentWeights[$index] += $weight;
         }
-    }
-
-    private function calculateSumWeight(): int
-    {
-        return array_sum($this->weights);
     }
 }

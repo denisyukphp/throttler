@@ -1,17 +1,16 @@
 <?php
 
-namespace Orangesoft\Throttler\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
+use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\NodeInterface;
+use Orangesoft\Throttler\Strategy\InMemoryCounter;
 use Orangesoft\Throttler\Strategy\RandomStrategy;
 use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
-use Orangesoft\Throttler\Strategy\InMemoryCounter;
 use Orangesoft\Throttler\Throttler;
 use Orangesoft\Throttler\ThrottlerInterface;
+use PHPUnit\Framework\TestCase;
 
 class ThrottlerTest extends TestCase
 {

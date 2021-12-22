@@ -1,76 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Collection;
 
 final class Collection implements CollectionInterface
 {
-    /**
-     * @var \SplObjectStorage
-     */
-    private $splObjectStorage;
-    /**
-     * @var bool
-     */
-    private $isWeighted = true;
+    private \SplObjectStorage $storage;
 
-    /**
-     * @param iterable|NodeInterface[] $nodes
-     */
+    private bool $isWeighted = true;
+
     public function __construct(iterable $nodes = [])
     {
-        $this->splObjectStorage = new \SplObjectStorage();
+        $this->storage = new \SplObjectStorage();
 
         foreach ($nodes as $node) {
             $this->addNode($node);
         }
     }
 
-    /**
-     * @param int $index
-     *
-     * @return object|NodeInterface
-     *
-     * @throws \OutOfRangeException
-     */
-    public function getNode(int $index): NodeInterface
+    public function addNode(NodeInterface $node): self
     {
-        if (!$this->isValidIndex($index)) {
-            throw new \OutOfRangeException(
-                sprintf('Undefined index %d', $index)
-            );
-        }
-
-        $this->splObjectStorage->rewind();
-
-        while ($index--) {
-            $this->splObjectStorage->next();
-        }
-
-        return $this->splObjectStorage->current();
-    }
-
-    private function isValidIndex(int $index): bool
-    {
-        return $index < $this->getQuantity();
-    }
-
-    public function addNode(NodeInterface $node): void
-    {
-        if (0 === $node->getWeight()) {
+        if (0 >= $node->getWeight()) {
             $this->isWeighted = false;
         }
 
-        $this->splObjectStorage->attach($node);
+        $this->storage->attach($node);
+
+        return $this;
+    }
+
+    public function getNode(int $index): NodeInterface
+    {
+        if ($index > $this->storage->count()) {
+            throw new \InvalidArgumentException(
+                sprintf('Cannot find node at index %d', $index)
+            );
+        }
+
+        $this->storage->rewind();
+
+        while ($index--) {
+            $this->storage->next();
+        }
+
+        /** @var NodeInterface $node */
+        $node = $this->storage->current();
+
+        return $node;
     }
 
     public function hasNode(NodeInterface $node): bool
     {
-        return $this->splObjectStorage->contains($node);
+        return $this->storage->contains($node);
     }
 
     public function removeNode(NodeInterface $node): void
     {
-        $this->splObjectStorage->detach($node);
+        $this->storage->detach($node);
+    }
+
+    public function purge(): void
+    {
+        $this->storage->removeAll($this->storage);
     }
 
     public function isWeighted(): bool
@@ -80,12 +72,12 @@ final class Collection implements CollectionInterface
 
     public function isEmpty(): bool
     {
-        return 0 === $this->getQuantity();
+        return 0 === $this->storage->count();
     }
 
-    public function getQuantity(): int
+    public function count(): int
     {
-        return $this->splObjectStorage->count();
+        return $this->storage->count();
     }
 
     /**
@@ -93,84 +85,11 @@ final class Collection implements CollectionInterface
      */
     public function toArray(): array
     {
-        return iterator_to_array($this->splObjectStorage, false);
+        return iterator_to_array($this->storage, false);
     }
 
-    /**
-     * @param int $index
-     *
-     * @return bool
-     */
-    public function offsetExists($index): bool
+    public function getIterator(): \Traversable
     {
-        return $this->isValidIndex($index);
-    }
-
-    /**
-     * @param int $index
-     *
-     * @return NodeInterface
-     */
-    public function offsetGet($index): NodeInterface
-    {
-        return $this->getNode($index);
-    }
-
-    /**
-     * @param null $index
-     * @param NodeInterface $node
-     *
-     * @throws \OutOfBoundsException
-     */
-    public function offsetSet($index, $node): void
-    {
-        if (null !== $index) {
-            throw new \OutOfBoundsException('Index cannot be set at all');
-        }
-
-        $this->addNode($node);
-    }
-
-    /**
-     * @param int $index
-     */
-    public function offsetUnset($index): void
-    {
-        $node = $this->getNode($index);
-
-        $this->removeNode($node);
-    }
-
-    public function count(): int
-    {
-        return $this->getQuantity();
-    }
-
-    public function serialize(): string
-    {
-        return serialize($this->splObjectStorage);
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized): void
-    {
-        $this->splObjectStorage = unserialize($serialized, [
-            'allowed_classes' => [
-                \SplObjectStorage::class,
-                Node::class,
-            ],
-        ]);
-    }
-
-    /**
-     * @return \ArrayIterator|NodeInterface[]
-     */
-    public function getIterator(): \ArrayIterator
-    {
-        $nodes = $this->toArray();
-
-        return new \ArrayIterator($nodes);
+        return $this->storage;
     }
 }

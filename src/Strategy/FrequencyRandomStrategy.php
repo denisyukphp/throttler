@@ -1,40 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 
 final class FrequencyRandomStrategy implements StrategyInterface
 {
-    /**
-     * @var int
-     */
-    private $frequency;
-    /**
-     * @var int
-     */
-    private $depth;
-
-    public function __construct(int $frequency = 80, int $depth = 20)
-    {
-        $this->frequency = $frequency;
-        $this->depth = $depth;
+    public function __construct(
+        private float $frequency = 0.8,
+        private float $depth = 0.2,
+    ) {
     }
 
-    public function getIndex(CollectionInterface $collection): int
+    public function getIndex(CollectionInterface $collection, array $context = []): int
     {
-        $total = $collection->getQuantity();
+        if ($collection->isEmpty()) {
+            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+        }
 
-        $lowOffset = ceil($this->depth * ($total / 100));
-        $highOffset = $lowOffset + ((1 < $total) ? 1 : 0);
+        $total = count($collection);
+        $low = (int) ceil($this->depth * $total);
+        $high = $low + ((1 < $total) ? 1 : 0);
 
-        $index = $this->isChance($this->frequency) ? mt_rand(1, $lowOffset) : mt_rand($highOffset, $total);
+        $index = $this->isChance($this->frequency) ? mt_rand(1, $low) : mt_rand($high, $total);
 
         return $index - 1;
     }
 
-    private function isChance(int $frequency): bool
+    private function isChance(float $frequency): bool
     {
-        return $frequency >= mt_rand(1, 100);
+        return $frequency * 100 >= mt_rand(1, 100);
     }
 }

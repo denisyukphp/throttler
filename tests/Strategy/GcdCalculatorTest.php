@@ -1,9 +1,9 @@
 <?php
 
-namespace Orangesoft\Throttler\Tests\Strategy;
+namespace Strategy;
 
-use PHPUnit\Framework\TestCase;
 use Orangesoft\Throttler\Strategy\GcdCalculator;
+use PHPUnit\Framework\TestCase;
 
 class GcdCalculatorTest extends TestCase
 {

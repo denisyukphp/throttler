@@ -1,29 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Strategy;
 
 final class InMemoryCounter implements CounterInterface
 {
     /**
-     * @var int
-     */
-    private $start;
-    /**
      * @var array<string, int>
      */
-    private $counter = [];
+    private array $counter = [];
 
-    public function __construct(int $start = 0)
-    {
-        $this->start = $start;
+    public function __construct(
+        private int $start = 0,
+    ) {
     }
 
-    public function increment(string $key = 'default'): int
+    public function next(string $name = 'default'): int
     {
-        if (!isset($this->counter[$key])) {
-            $this->counter[$key] = $this->start;
+        if (!isset($this->counter[$name])) {
+            $this->counter[$name] = $this->start;
         }
 
-        return $this->counter[$key]++;
+        return $this->counter[$name]++;
     }
 }

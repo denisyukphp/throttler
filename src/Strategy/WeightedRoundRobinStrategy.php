@@ -1,44 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\NodeInterface;
+use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 
 final class WeightedRoundRobinStrategy implements StrategyInterface
 {
-    /**
-     * @var CounterInterface
-     */
-    private $counter;
-    /**
-     * @var int
-     */
-    private $gcd = 0;
-    /**
-     * @var int
-     */
-    private $maxWeight = 0;
-    /**
-     * @var int
-     */
-    private $currentWeight = 0;
+    private int $gcd = 0;
+    private int $maxWeight = 0;
+    private int $currentWeight = 0;
 
-    public function __construct(CounterInterface $counter)
-    {
-        $this->counter = $counter;
+    public function __construct(
+        private CounterInterface $counter,
+    ) {
     }
 
-    /**
-     * @param CollectionInterface|NodeInterface[] $collection
-     *
-     * @return int
-     */
-    public function getIndex(CollectionInterface $collection): int
+    public function getIndex(CollectionInterface $collection, array $context = []): int
     {
+        if ($collection->isEmpty()) {
+            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+        }
+
         if (!$collection->isWeighted()) {
-            throw new UnweightedCollectionException('All nodes in the collection must be weighted');
+            throw new UnweightedCollectionException('All nodes in the collection must be weighted.');
         }
 
         if (0 === $this->gcd) {
@@ -50,7 +39,7 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
         }
 
         while (true) {
-            $index = $this->counter->increment() % $collection->getQuantity();
+            $index = $this->counter->next($context['counter_name'] ?? self::class) % count($collection);
 
             if (0 === $index) {
                 $this->currentWeight -= $this->gcd;
@@ -66,19 +55,13 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
                 return $index;
             }
         }
-
-        throw new \RuntimeException('You never will catch this exception');
     }
 
-    /**
-     * @param CollectionInterface|NodeInterface[] $collection
-     *
-     * @return int
-     */
     private function calculateGcd(CollectionInterface $collection): int
     {
         $gcd = 0;
 
+        /** @var NodeInterface $node */
         foreach ($collection as $node) {
             $gcd = GcdCalculator::calculate($gcd, $node->getWeight());
         }
@@ -86,15 +69,11 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
         return $gcd;
     }
 
-    /**
-     * @param CollectionInterface|NodeInterface[] $collection
-     *
-     * @return int
-     */
     private function calculateMaxWeight(CollectionInterface $collection): int
     {
         $maxWeight = 0;
 
+        /** @var NodeInterface $node */
         foreach ($collection as $node) {
             if ($node->getWeight() >= $maxWeight) {
                 $maxWeight = $node->getWeight();

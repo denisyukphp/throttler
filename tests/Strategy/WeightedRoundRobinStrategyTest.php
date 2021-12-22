@@ -1,12 +1,12 @@
 <?php
 
-namespace Orangesoft\Throttler\Tests\Strategy;
+namespace Strategy;
 
-use PHPUnit\Framework\TestCase;
-use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\Collection;
-use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
+use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
+use PHPUnit\Framework\TestCase;
 
 class WeightedRoundRobinStrategyTest extends TestCase
 {
