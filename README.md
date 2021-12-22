@@ -16,7 +16,7 @@ You can install the latest version via [Composer](https://getcomposer.org/):
 composer require orangesoft/throttler
 ```
 
-This package requires PHP 7.2 or later.
+This package requires PHP 8.1 or later.
 
 ## Quick usage
 
@@ -32,24 +32,21 @@ use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
 use Orangesoft\Throttler\Throttler;
 
-$nodes = [
-    new Node('node1', 5),
-    new Node('node2', 1),
-    new Node('node3', 1),
-];
-
 $throttler = new Throttler(
-    new Collection($nodes),
     new WeightedRoundRobinStrategy(
-        new InMemoryCounter()
+        new InMemoryCounter(start: 0)
     )
 );
 
+$collection = new Collection([
+    new Node('node1', 5),
+    new Node('node2', 1),
+    new Node('node3', 1),
+]);
+
 while (true) {
     /** @var NodeInterface $node */
-    $node = $throttler->next();
-    
-    $name = $node->getName();
+    $node = $throttler->next($collection);
     
     // ...
 }
@@ -59,7 +56,7 @@ Set weight for Node as the second argument in constructor if you are using weigh
 
 ## Benchmarks
 
-Run `composer bench` to check out strategies benchmarks:
+Run `composer bench` to check out benchmarks:
 
 ```text
 +-------------------------------+------+-----+----------+----------+----------+---------+
@@ -83,5 +80,7 @@ The report is based on measuring the speed. Check `best` column to find out whic
 - [Sort nodes](docs/index.md#sort-nodes)
 - [Keep counter](docs/index.md#keep-counter)
 - [Serialize strategies](docs/index.md#serialize-strategies)
+- [Dynamically change strategy](docs/index.md#dynamically-change-strategy)
+- [Balance cluster](docs/index.md#balance-cluster)
 
 Read more about usage on [Orangesoft Tech](https://orangesoft.co/blog/how-to-make-proxy-balancing-in-guzzle).
