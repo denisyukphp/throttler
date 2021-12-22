@@ -15,7 +15,7 @@ final class ClusterSet
         public readonly array $clusterNames,
     ) {
         if (0 === count($clusterNames)) {
-            throw new \InvalidArgumentException('Cluster names must no be empty.');
+            throw new \InvalidArgumentException('Cluster names must not be empty.');
         }
     }
 }
