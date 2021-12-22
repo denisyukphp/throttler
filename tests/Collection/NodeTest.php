@@ -1,18 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Orangesoft\Throttler\Tests\Collection;
 
-use PHPUnit\Framework\TestCase;
 use Orangesoft\Throttler\Collection\Node;
+use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase
 {
-    public function testNode(): void
+    public function testName(): void
+    {
+        $node = new Node('node1');
+
+        $this->assertSame('node1', $node->getName());
+    }
+
+    public function testWeight(): void
+    {
+        $node = new Node('node1', 4);
+
+        $this->assertSame(4, $node->getWeight());
+    }
+
+    public function testInfo(): void
     {
         $node = new Node('node1', 4, ['a' => 'b']);
 
-        $this->assertSame('node1', $node->getName());
-        $this->assertSame(4, $node->getWeight());
-        $this->assertSame('b', $node->getInfo()['a']);
+        $this->assertSame(['a' => 'b'], $node->getInfo());
     }
 }

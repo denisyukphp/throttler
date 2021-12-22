@@ -1,6 +1,8 @@
 <?php
 
-namespace Strategy;
+declare(strict_types=1);
+
+namespace Orangesoft\Throttler\Tests\Strategy;
 
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Node;
@@ -11,13 +13,11 @@ class WeightedRandomStrategyTest extends TestCase
 {
     public function testWeightedRandom(): void
     {
-        $nodes = [
+        $collection = new Collection([
             new Node('node1', 10),
             new Node('node2', 5),
             new Node('node3', 1),
-        ];
-
-        $collection = new Collection($nodes);
+        ]);
 
         $strategy = new WeightedRandomStrategy();
 
@@ -39,7 +39,7 @@ class WeightedRandomStrategyTest extends TestCase
             $this->assertGreaterThan(0, $count);
         }
 
-        $this->assertSame(1000, array_sum($indexes));
+        $this->assertEquals(1000, array_sum($indexes));
         $this->assertGreaterThan($indexes[1], $indexes[0]);
         $this->assertGreaterThan($indexes[2], $indexes[1]);
     }

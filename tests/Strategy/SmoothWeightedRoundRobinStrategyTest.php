@@ -1,6 +1,8 @@
 <?php
 
-namespace Strategy;
+declare(strict_types=1);
+
+namespace Orangesoft\Throttler\Tests\Strategy;
 
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Node;
@@ -9,67 +11,39 @@ use PHPUnit\Framework\TestCase;
 
 class SmoothWeightedRoundRobinStrategyTest extends TestCase
 {
-    /**
-     * @return SmoothWeightedRoundRobinStrategy
-     */
-    public function testSmoothWeightedRoundRobin(): SmoothWeightedRoundRobinStrategy
+    private Collection $collection;
+
+    public function setUp(): void
     {
-        $nodes = [
+        $this->collection = new Collection([
             new Node('node1', 5),
             new Node('node2', 1),
             new Node('node3', 1),
-        ];
+        ]);
+    }
 
-        $collection = new Collection($nodes);
-
+    public function testSmoothWeightedRoundRobin(): string
+    {
         $strategy = new SmoothWeightedRoundRobinStrategy();
 
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(1, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(1, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
 
-        return $strategy;
+        return serialize($strategy);
     }
 
     /**
-     * @param SmoothWeightedRoundRobinStrategy $strategy
-     *
-     * @return string
-     *
      * @depends testSmoothWeightedRoundRobin
      */
-    public function testSerialize(SmoothWeightedRoundRobinStrategy $strategy): string
+    public function testRestartSmoothWeightedRoundRobin(string $serializedStrategy): void
     {
-        $serialized = serialize($strategy);
-
-        $this->assertIsString($serialized);
-
-        return $serialized;
-    }
-
-    /**
-     * @param string $serialized
-     *
-     * @depends testSerialize
-     */
-    public function testUnserialize(string $serialized): void
-    {
-        $nodes = [
-            new Node('node1', 5),
-            new Node('node2', 1),
-            new Node('node3', 1),
-        ];
-
-        $collection = new Collection($nodes);
-
         /** @var SmoothWeightedRoundRobinStrategy $strategy */
-        $strategy = unserialize($serialized);
+        $strategy = unserialize($serializedStrategy);
 
-        $this->assertInstanceOf(SmoothWeightedRoundRobinStrategy::class, $strategy);
-
-        $this->assertSame(2, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
+        $this->assertEquals(2, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
     }
 }

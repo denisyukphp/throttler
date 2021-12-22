@@ -1,6 +1,8 @@
 <?php
 
-namespace Strategy;
+declare(strict_types=1);
+
+namespace Orangesoft\Throttler\Tests\Strategy;
 
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Node;
@@ -10,51 +12,41 @@ use PHPUnit\Framework\TestCase;
 
 class WeightedRoundRobinStrategyTest extends TestCase
 {
-    /**
-     * @return InMemoryCounter
-     */
-    public function testWeightedRoundRobin(): InMemoryCounter
+    private Collection $collection;
+
+    public function setUp(): void
     {
-        $nodes = [
+        $this->collection = new Collection([
             new Node('node1', 5),
             new Node('node2', 1),
             new Node('node3', 1),
-        ];
+        ]);
+    }
 
-        $collection = new Collection($nodes);
-
-        $inMemoryCounter = new InMemoryCounter();
+    public function testWeightedRoundRobin(): InMemoryCounter
+    {
+        $inMemoryCounter = new InMemoryCounter(start: 0);
 
         $strategy = new WeightedRoundRobinStrategy($inMemoryCounter);
 
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
 
         return $inMemoryCounter;
     }
 
     /**
-     * @param InMemoryCounter $inMemoryCounter
-     *
      * @depends testWeightedRoundRobin
      */
-    public function testRestart(InMemoryCounter $inMemoryCounter): void
+    public function testRestartWeightedRoundRobin(InMemoryCounter $inMemoryCounter): void
     {
-        $nodes = [
-            new Node('node1', 5),
-            new Node('node2', 1),
-            new Node('node3', 1),
-        ];
-
-        $collection = new Collection($nodes);
-
         $strategy = new WeightedRoundRobinStrategy($inMemoryCounter);
 
-        $this->assertSame(1, $strategy->getIndex($collection));
-        $this->assertSame(2, $strategy->getIndex($collection));
-        $this->assertSame(0, $strategy->getIndex($collection));
+        $this->assertEquals(1, $strategy->getIndex($this->collection));
+        $this->assertEquals(2, $strategy->getIndex($this->collection));
+        $this->assertEquals(0, $strategy->getIndex($this->collection));
     }
 }

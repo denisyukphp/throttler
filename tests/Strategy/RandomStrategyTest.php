@@ -1,6 +1,8 @@
 <?php
 
-namespace Strategy;
+declare(strict_types=1);
+
+namespace Orangesoft\Throttler\Tests\Strategy;
 
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Node;
@@ -11,13 +13,11 @@ class RandomStrategyTest extends TestCase
 {
     public function testRandom(): void
     {
-        $nodes = [
+        $collection = new Collection([
             new Node('node1'),
             new Node('node2'),
             new Node('node3'),
-        ];
-
-        $collection = new Collection($nodes);
+        ]);
 
         $strategy = new RandomStrategy();
 
@@ -39,6 +39,6 @@ class RandomStrategyTest extends TestCase
             $this->assertGreaterThan(0, $count);
         }
 
-        $this->assertSame(1000, array_sum($indexes));
+        $this->assertEquals(1000, array_sum($indexes));
     }
 }
