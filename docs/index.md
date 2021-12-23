@@ -5,44 +5,45 @@
 - [Sort nodes](#sort-nodes)
 - [Keep counter](#keep-counter)
 - [Serialize strategies](#serialize-strategies)
+- [Dynamically change strategy](#dynamically-change-strategy)
+- [Balance cluster](#balance-cluster)
 
 ## Configure Throttler
 
-You need to collect a collection of nodes and choose a strategy. Set weight for Node as the second argument in constructor if you are using weighted-strategies:
+You need to choose a strategy and configure it:
 
 ```php
 <?php
 
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
 use Orangesoft\Throttler\Throttler;
 
-$nodes = [
+$throttler = new Throttler(
+    new WeightedRoundRobinStrategy(
+        new InMemoryCounter(start: 0)
+    )
+);
+```
+
+Collect a collection of nodes. Set weight for Node as the second argument if you are using weighted-strategies:
+
+```php
+$collection = new Collection([
     new Node('node1', 5),
     new Node('node2', 1),
     new Node('node3', 1),
-];
-
-$collection = new Collection($nodes);
-
-$strategy = new WeightedRoundRobinStrategy(
-    new InMemoryCounter()
-);
-
-$throttler = new Throttler($collection, $strategy);
+]);
 ```
 
-To get next Node call the `next()` method:
+To get next Node call the `next()` method with passed collection:
 
 ```php
 while (true) {
-    /** @var NodeInterface $node */
-    $node = $throttler->next();
-    
-    $name = $node->getName();
+    /** @var Node $node */
+    $node = $throttler->pick($collection);
     
     // ...
 }
@@ -75,6 +76,8 @@ Strategies are divided into two types: random and round-robin. The following str
 - [RoundRobinStrategy](../src/Strategy/RoundRobinStrategy.php)
 - [WeightedRoundRobinStrategy](../src/Strategy/WeightedRoundRobinStrategy.php)
 - [SmoothWeightedRoundRobinStrategy](../src/Strategy/SmoothWeightedRoundRobinStrategy.php)
+- [MultipleDynamicStrategy](../src/Strategy/MultipleDynamicStrategy.php)
+- [ClusterDetermineStrategy](../src/Strategy/ClusterDetermineStrategy.php)
 
 ## Sort nodes
 
@@ -84,7 +87,6 @@ For some strategies, such as [FrequencyRandomStrategy](../src/Strategy/Frequency
 <?php
 
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Sorter;
@@ -107,8 +109,7 @@ $collection = new Collection([
 
 $sorter = new Sorter();
 
-/** @var CollectionInterface $sortedCollection */
-$sortedCollection = $sorter->sort($collection, new Desc());
+$sorter->sort($collection, new Desc());
 ```
 
 The nodes at the top of the list will be used more often. You can manage sorting using [Asc](../src/Collection/Asc.php) and [Desc](../src/Collection/Desc.php) comparators. Example for the Desc direction:
@@ -130,18 +131,15 @@ The nodes at the top of the list will be used more often. You can manage sorting
 +--------+--------+
 ```
 
-FrequencyRandomStrategy has 2 not required options: frequency and depth. Frequency is probability to choose nodes from a first group in percent. Depth is length the first group from the list in percent. By default frequency is 80 and depth is 20.
+FrequencyRandomStrategy has 2 not required options: frequency and depth. Frequency is probability to choose nodes from a first group in percent. Depth is length the first group from the list in percent. By default, frequency is 0.8 and depth is 0.2:
 
 ```php
-$frequency = 80;
-$depth = 20;
+$throttler = new Throttler(
+    new FrequencyRandomStrategy(frequency: 0.8, depth: 0.2)
+);
 
-$strategy = new FrequencyRandomStrategy($frequency, $depth);
-
-$throttler = new Throttler($sortedCollection, $strategy);
-
-/** @var NodeInterface $node */
-$node = $throttler->next();
+/** @var Node $node */
+$node = $throttler->pick($collection);
 ```
 
 The probability of choosing nodes for FrequencyRandomStrategy can be visualized as follows:
@@ -168,7 +166,7 @@ If you need the reverse order of the nodes use Asc direction.
 
 ## Keep counter
 
-For strategies are [RoundRobinStrategy](../src/Strategy/RoundRobinStrategy.php) and [WeightedRoundRobinStrategy](../src/Strategy/WeightedRoundRobinStrategy.php) you must use InMemoryCounter to remember order of nodes. A counter is not needed for round-robin strategies.
+For strategies are [RoundRobinStrategy](../src/Strategy/RoundRobinStrategy.php) and [WeightedRoundRobinStrategy](../src/Strategy/WeightedRoundRobinStrategy.php) you must use InMemoryCounter to remember order of nodes. A counter is not needed for round-robin strategies:
 
 ```php
 <?php
@@ -179,9 +177,9 @@ use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Predis\Client;
 
-$counter = new InMemoryCounter();
-
-$strategy = new RoundRobinStrategy($counter);
+$strategy = new RoundRobinStrategy(
+    new InMemoryCounter(start: 0)
+);
 ```
 
 You can replace InMemoryCounter if you need to keep the order of these strategies between PHP calls, for example, in queues. Just to implement [CounterInterface](../src/Strategy/CounterInterface.php):
@@ -189,20 +187,18 @@ You can replace InMemoryCounter if you need to keep the order of these strategie
 ```php
 class RedisCounter implements CounterInterface
 {
-    private $client;
-
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
+    public function __construct(
+        private Client $client,
+    ) {
     }
 
-    public function increment(string $key = 'default'): int
+    public function next(string $name = 'default'): int
     {
-        if (!$this->client->exists($key)) {
-            $this->client->set($key, -1);
+        if (!$this->client->exists($name)) {
+            $this->client->set($name, -1);
         }
 
-        return $this->client->incr($key);
+        return $this->client->incr($name);
     }
 }
 ```
@@ -212,16 +208,16 @@ In the example above, we wrote the counter with Redis.
 ```php
 /** @var Predis\Client $client */
 
-$counter = new RedisCounter($client);
-
-$strategy = new WeightedRoundRobinStrategy($counter);
+$strategy = new WeightedRoundRobinStrategy(
+    new RedisCounter($client)
+);
 ```
 
 Now Throttler will resume work from the last node according to the chosen strategy.
 
 ## Serialize strategies
 
-[SmoothWeightedRoundRobinStrategy](../src/Strategy/SmoothWeightedRoundRobinStrategy.php) does not supported counters. Instead it you can serialize and unserialize this strategy to keep last state:
+[SmoothWeightedRoundRobinStrategy](../src/Strategy/SmoothWeightedRoundRobinStrategy.php) does not support counters. Instead it you can serialize and unserialize this strategy to keep last state:
 
 ```php
 <?php
@@ -234,7 +230,7 @@ $strategy = new SmoothWeightedRoundRobinStrategy();
 $serialized = serialize($strategy);
 ```
 
-The serialization result will return an instance of SmoothWeightedRoundRobinStrategy with the actual weights for the nodes.
+The serialization result will return an instance of SmoothWeightedRoundRobinStrategy with the actual weights for the nodes:
 
 ```php
 /** @var SmoothWeightedRoundRobinStrategy $strategy */
@@ -242,3 +238,92 @@ $strategy = unserialize($serialized);
 ```
 
 This way you can preserve the order of nodes for a given strategy between PHP calls.
+
+## Dynamically change strategy
+
+You can dynamically change the strategy from the client code. To do this, configure the [MultipleDynamicStrategy](../src/Strategy/MultipleDynamicStrategy.php) with the strategies you need:
+
+```php
+<?php
+
+use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\Strategy\MultipleDynamicStrategy;
+use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
+use Orangesoft\Throttler\Strategy\RandomStrategy;
+use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\Node;
+
+$throttler = new Throttler(
+    new MultipleDynamicStrategy(
+        new RoundRobinStrategy(new InMemoryCounter(start: 0)),
+        new RandomStrategy()
+    )
+);
+```
+
+Create collection of nodes:
+
+```php
+$collection = new Collection([
+    new Node('node1'),
+    new Node('node2'),
+    new Node('node3'),
+]);
+```
+
+Pass the `strategy_name` parameter through the context with the name of the strategy class according to which the collection needs to be balanced:
+
+```php
+/** @var Node $node */
+$node = $throttler->pick($collection, [
+    'strategy_name' => RoundRobinStrategy::class,
+]);
+```
+
+The advantage of this method is that you do not need to create many instances of the balancer.
+
+## Balance cluster
+
+You can divide the nodes into clusters and set a specific balancing strategy for each cluster. To do this, configure the [ClusterDetermineStrategy](../src/Strategy/ClusterDetermineStrategy.php) as shown below:
+
+```php
+<?php
+
+use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\Strategy\ClusterSet;
+use Orangesoft\Throttler\Strategy\ClusterDetermineStrategy;
+use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
+use Orangesoft\Throttler\Strategy\RandomStrategy;
+use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\Node;
+
+$throttler = new Throttler(
+    new ClusterDetermineStrategy(
+        new ClusterSet(new RoundRobinStrategy(new InMemoryCounter(start: 0)), ['cluster1']),
+        new ClusterSet(new RandomStrategy(), ['cluster2', 'cluster3'])
+    )
+);
+```
+
+Create clusters from nodes:
+
+```php
+$collection = new Collection([
+    new Node('node1'),
+    new Node('node2'),
+    new Node('node3'),
+]);
+
+$cluster = new Cluster('cluster1', $collection);
+```
+
+Using the `balance()` method, force your cluster to balance:
+
+```php
+/** @var Node $node */
+$node = $cluster->balance($throttler);
+```
+
+This method is well suited in cases where the nodes can be divided according to a specific criterion and each cluster needs its own balancing strategy.
