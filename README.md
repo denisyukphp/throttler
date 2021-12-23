@@ -26,7 +26,6 @@ Configure Throttler as below:
 <?php
 
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
@@ -45,7 +44,7 @@ $collection = new Collection([
 ]);
 
 while (true) {
-    /** @var NodeInterface $node */
+    /** @var Node $node */
     $node = $throttler->pick($collection);
     
     // ...
