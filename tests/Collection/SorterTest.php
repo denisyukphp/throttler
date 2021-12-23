@@ -26,10 +26,10 @@ class SorterTest extends TestCase
 
         $sorter->sort($collection, new Asc());
 
-        $this->assertSame('node1', $collection->getNode(0)->getName());
-        $this->assertSame('node2', $collection->getNode(1)->getName());
-        $this->assertSame('node3', $collection->getNode(2)->getName());
-        $this->assertSame('node4', $collection->getNode(3)->getName());
+        $this->assertSame('node1', $collection->getNode(0)->name);
+        $this->assertSame('node2', $collection->getNode(1)->name);
+        $this->assertSame('node3', $collection->getNode(2)->name);
+        $this->assertSame('node4', $collection->getNode(3)->name);
     }
 
     public function testSortDesc(): void
@@ -45,9 +45,9 @@ class SorterTest extends TestCase
 
         $sorter->sort($collection, new Desc());
 
-        $this->assertSame('node4', $collection->getNode(0)->getName());
-        $this->assertSame('node3', $collection->getNode(1)->getName());
-        $this->assertSame('node2', $collection->getNode(2)->getName());
-        $this->assertSame('node1', $collection->getNode(3)->getName());
+        $this->assertSame('node4', $collection->getNode(0)->name);
+        $this->assertSame('node3', $collection->getNode(1)->name);
+        $this->assertSame('node2', $collection->getNode(2)->name);
+        $this->assertSame('node1', $collection->getNode(3)->name);
     }
 }
