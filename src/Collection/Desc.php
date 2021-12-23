@@ -6,8 +6,8 @@ namespace Orangesoft\Throttler\Collection;
 
 final class Desc
 {
-    public function __invoke(NodeInterface $a, NodeInterface $b): int
+    public function __invoke(Node $a, Node $b): int
     {
-        return $b->getWeight() - $a->getWeight();
+        return $b->weight - $a->weight;
     }
 }

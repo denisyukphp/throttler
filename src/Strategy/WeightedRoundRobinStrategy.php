@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Strategy;
 
+use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 
@@ -51,7 +51,7 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
 
             $node = $collection->getNode($index);
 
-            if ($node->getWeight() >= $this->currentWeight) {
+            if ($node->weight >= $this->currentWeight) {
                 return $index;
             }
         }
@@ -61,9 +61,9 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
     {
         $gcd = 0;
 
-        /** @var NodeInterface $node */
+        /** @var Node $node */
         foreach ($collection as $node) {
-            $gcd = GcdCalculator::calculate($gcd, $node->getWeight());
+            $gcd = GcdCalculator::calculate($gcd, $node->weight);
         }
 
         return $gcd;
@@ -73,10 +73,10 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
     {
         $maxWeight = 0;
 
-        /** @var NodeInterface $node */
+        /** @var Node $node */
         foreach ($collection as $node) {
-            if ($node->getWeight() >= $maxWeight) {
-                $maxWeight = $node->getWeight();
+            if ($node->weight >= $maxWeight) {
+                $maxWeight = $node->weight;
             }
         }
 

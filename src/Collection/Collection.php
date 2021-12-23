@@ -19,9 +19,9 @@ final class Collection implements CollectionInterface
         }
     }
 
-    public function addNode(NodeInterface $node): self
+    public function addNode(Node $node): self
     {
-        if (0 >= $node->getWeight()) {
+        if (0 >= $node->weight) {
             $this->isWeighted = false;
         }
 
@@ -30,7 +30,7 @@ final class Collection implements CollectionInterface
         return $this;
     }
 
-    public function getNode(int $index): NodeInterface
+    public function getNode(int $index): Node
     {
         if ($index > $this->storage->count()) {
             throw new \InvalidArgumentException(
@@ -44,18 +44,18 @@ final class Collection implements CollectionInterface
             $this->storage->next();
         }
 
-        /** @var NodeInterface $node */
+        /** @var Node $node */
         $node = $this->storage->current();
 
         return $node;
     }
 
-    public function hasNode(NodeInterface $node): bool
+    public function hasNode(Node $node): bool
     {
         return $this->storage->contains($node);
     }
 
-    public function removeNode(NodeInterface $node): void
+    public function removeNode(Node $node): void
     {
         $this->storage->detach($node);
     }
@@ -81,7 +81,7 @@ final class Collection implements CollectionInterface
     }
 
     /**
-     * @return NodeInterface[]
+     * @return Node[]
      */
     public function toArray(): array
     {

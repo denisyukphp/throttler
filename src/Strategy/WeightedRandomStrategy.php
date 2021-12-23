@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Strategy;
 
+use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 
@@ -31,9 +31,9 @@ final class WeightedRandomStrategy implements StrategyInterface
 
         $randomWeight = mt_rand(1, $this->sumWeight);
 
-        /** @var array<int, NodeInterface> $collection*/
+        /** @var array<int, Node> $collection*/
         foreach ($collection as $index => $node) {
-            $currentWeight += $node->getWeight();
+            $currentWeight += $node->weight;
 
             if ($randomWeight <= $currentWeight) {
                 return $index;
@@ -47,9 +47,9 @@ final class WeightedRandomStrategy implements StrategyInterface
     {
         $sumWeight = 0;
 
-        /** @var NodeInterface $node */
+        /** @var Node $node */
         foreach ($collection as $node) {
-            $sumWeight += $node->getWeight();
+            $sumWeight += $node->weight;
         }
 
         return $sumWeight;

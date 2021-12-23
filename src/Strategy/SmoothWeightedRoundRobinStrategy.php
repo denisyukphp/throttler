@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Strategy;
 
+use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
 use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 
@@ -31,9 +31,9 @@ final class SmoothWeightedRoundRobinStrategy implements StrategyInterface
         }
 
         if (0 === count($this->weights) || 0 === count($this->currentWeights)) {
-            /** @var array<int, NodeInterface> $collection */
+            /** @var array<int, Node> $collection */
             foreach ($collection as $index => $node) {
-                $this->weights[$index] = $this->currentWeights[$index] = $node->getWeight();
+                $this->weights[$index] = $this->currentWeights[$index] = $node->weight;
             }
         }
 

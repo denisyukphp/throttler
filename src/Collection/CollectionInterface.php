@@ -6,13 +6,13 @@ namespace Orangesoft\Throttler\Collection;
 
 interface CollectionInterface extends \Countable, \IteratorAggregate
 {
-    public function addNode(NodeInterface $node): self;
+    public function addNode(Node $node): self;
 
-    public function getNode(int $index): NodeInterface;
+    public function getNode(int $index): Node;
 
-    public function hasNode(NodeInterface $node): bool;
+    public function hasNode(Node $node): bool;
 
-    public function removeNode(NodeInterface $node): void;
+    public function removeNode(Node $node): void;
 
     public function purge(): void;
 
@@ -21,7 +21,7 @@ interface CollectionInterface extends \Countable, \IteratorAggregate
     public function isEmpty(): bool;
 
     /**
-     * @return NodeInterface[]
+     * @return Node[]
      */
     public function toArray(): array;
 }

@@ -6,8 +6,8 @@ namespace Orangesoft\Throttler\Collection;
 
 final class Asc
 {
-    public function __invoke(NodeInterface $a, NodeInterface $b): int
+    public function __invoke(Node $a, Node $b): int
     {
-        return $a->getWeight() - $b->getWeight();
+        return $a->weight - $b->weight;
     }
 }

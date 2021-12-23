@@ -6,7 +6,7 @@ namespace Orangesoft\Throttler;
 
 use Orangesoft\Throttler\Strategy\StrategyInterface;
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\NodeInterface;
+use Orangesoft\Throttler\Collection\Node;
 
 final class Throttler implements ThrottlerInterface
 {
@@ -15,7 +15,7 @@ final class Throttler implements ThrottlerInterface
     ) {
     }
 
-    public function pick(CollectionInterface $collection, array $context = []): NodeInterface
+    public function pick(CollectionInterface $collection, array $context = []): Node
     {
         $index = $this->strategy->getIndex($collection, $context);
 

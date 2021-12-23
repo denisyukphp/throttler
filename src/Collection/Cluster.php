@@ -14,7 +14,7 @@ final class Cluster implements ClusterInterface
     ) {
     }
 
-    public function balance(ThrottlerInterface $throttler, array $context = []): NodeInterface
+    public function balance(ThrottlerInterface $throttler, array $context = []): Node
     {
         return $throttler->pick($this->collection, array_merge($context, [
             'cluster_name' => $this->name,
