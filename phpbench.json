@@ -3,7 +3,7 @@
     "runner.path": "./benchmarks/",
     "runner.progress": "dots",
     "report.generators": {
-        "speed": {
+        "throttler": {
             "extends": "aggregate",
             "title": "Throttler benchmarks",
             "description": "How long strategies take to load balancing",
