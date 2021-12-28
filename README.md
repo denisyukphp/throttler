@@ -1,5 +1,6 @@
 # Throttler
 
+[![Build Status](https://img.shields.io/github/workflow/status/Orangesoft-Development/throttler/build/main?style=plastic)](https://github.com/Orangesoft-Development/throttler/actions/workflows/continuous-integration.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/orangesoft/throttler?style=plastic&color=8892BF)](https://packagist.org/packages/orangesoft/throttler)
 [![Total Downloads](https://img.shields.io/packagist/dt/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
