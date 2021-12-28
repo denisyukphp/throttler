@@ -89,4 +89,4 @@ jobs:
         run: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run Benchmarks
-        run: vendor/bin/phpbench run --report=throttler --no-interaction --no-ansi
+        run: vendor/bin/phpbench run --report=throttler --progress=plain --no-interaction --no-ansi
