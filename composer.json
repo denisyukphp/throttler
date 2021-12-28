@@ -31,7 +31,7 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always",
-        "bench": "vendor/bin/phpbench run --report=speed --ansi"
+        "bench": "vendor/bin/phpbench run --report=throttler --ansi"
     },
     "config": {
         "sort-packages": true
