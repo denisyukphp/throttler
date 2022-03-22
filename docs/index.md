@@ -257,7 +257,7 @@ use Orangesoft\Throttler\Collection\Node;
 $throttler = new Throttler(
     new MultipleDynamicStrategy(
         new RoundRobinStrategy(new InMemoryCounter(start: 0)),
-        new RandomStrategy()
+        new RandomStrategy(),
     )
 );
 ```
@@ -302,7 +302,7 @@ use Orangesoft\Throttler\Collection\Node;
 $throttler = new Throttler(
     new ClusterDetermineStrategy(
         new ClusterSet(new RoundRobinStrategy(new InMemoryCounter(start: 0)), ['cluster1']),
-        new ClusterSet(new RandomStrategy(), ['cluster2', 'cluster3'])
+        new ClusterSet(new RandomStrategy(), ['cluster2', 'cluster3']),
     )
 );
 ```
