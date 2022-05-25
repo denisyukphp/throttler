@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\Node;
 
 final class MultipleDynamicStrategy implements StrategyInterface
 {
     /**
      * @var array<string, StrategyInterface>
      */
-    private array $pool;
+    private array $pool = [];
 
     public function __construct(StrategyInterface ...$strategies)
     {
@@ -20,14 +21,14 @@ final class MultipleDynamicStrategy implements StrategyInterface
         }
     }
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if (!isset($context['strategy_name'])) {
-            throw new \RuntimeException('Required parameter "strategy_name" is missing.');
+            throw new \LogicException('Required parameter "strategy_name" is missing.');
         }
 
         if (!class_exists($context['strategy_name']) || !is_a($context['strategy_name'], StrategyInterface::class, true)) {
-            throw new \RuntimeException(
+            throw new \LogicException(
                 vsprintf('Strategy must be a class that exists and implements "%s" interface, "%s" given.', [
                     StrategyInterface::class,
                     $context['strategy_name'],
@@ -36,7 +37,7 @@ final class MultipleDynamicStrategy implements StrategyInterface
         }
 
         if (!isset($this->pool[$context['strategy_name']])) {
-            throw new \RuntimeException(
+            throw new \LogicException(
                 sprintf('Strategy "%s" is undefined.', $context['strategy_name'])
             );
         }
@@ -44,6 +45,6 @@ final class MultipleDynamicStrategy implements StrategyInterface
         /** @var StrategyInterface $strategy */
         $strategy = $this->pool[$context['strategy_name']];
 
-        return $strategy->getIndex($collection, $context);
+        return $strategy->getNode($collection, $context);
     }
 }

@@ -6,6 +6,7 @@ namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
+use Orangesoft\Throttler\Collection\Node;
 
 final class RoundRobinStrategy implements StrategyInterface
 {
@@ -14,12 +15,14 @@ final class RoundRobinStrategy implements StrategyInterface
     ) {
     }
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if ($collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+            throw new EmptyCollectionException();
         }
 
-        return $this->counter->next($context['counter_name'] ?? self::class) % count($collection);
+        $index = $this->counter->next($context['counter_name'] ?? self::class) % count($collection);
+
+        return $collection->getNode($index);
     }
 }

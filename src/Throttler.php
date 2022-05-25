@@ -17,8 +17,6 @@ final class Throttler implements ThrottlerInterface
 
     public function pick(CollectionInterface $collection, array $context = []): Node
     {
-        $index = $this->strategy->getIndex($collection, $context);
-
-        return $collection->getNode($index);
+        return $this->strategy->getNode($collection, $context);
     }
 }

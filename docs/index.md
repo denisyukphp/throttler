@@ -23,7 +23,7 @@ use Orangesoft\Throttler\Throttler;
 
 $throttler = new Throttler(
     new WeightedRoundRobinStrategy(
-        new InMemoryCounter(start: 0)
+        new InMemoryCounter(start: 0),
     )
 );
 ```
@@ -135,7 +135,7 @@ FrequencyRandomStrategy has 2 not required options: frequency and depth. Frequen
 
 ```php
 $throttler = new Throttler(
-    new FrequencyRandomStrategy(frequency: 0.8, depth: 0.2)
+    new FrequencyRandomStrategy(frequency: 0.8, depth: 0.2),
 );
 
 /** @var Node $node */
@@ -178,7 +178,7 @@ use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
 use Predis\Client;
 
 $strategy = new RoundRobinStrategy(
-    new InMemoryCounter(start: 0)
+    new InMemoryCounter(start: 0),
 );
 ```
 
@@ -209,7 +209,7 @@ In the example above, we wrote the counter with Redis.
 /** @var Predis\Client $client */
 
 $strategy = new WeightedRoundRobinStrategy(
-    new RedisCounter($client)
+    new RedisCounter($client),
 );
 ```
 

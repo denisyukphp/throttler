@@ -6,13 +6,12 @@ namespace Orangesoft\Throttler\Collection;
 
 final class Collection implements CollectionInterface
 {
-    private \SplObjectStorage $storage;
-
+    private \SplObjectStorage $nodes;
     private bool $isWeighted = true;
 
     public function __construct(iterable $nodes = [])
     {
-        $this->storage = new \SplObjectStorage();
+        $this->nodes = new \SplObjectStorage();
 
         foreach ($nodes as $node) {
             $this->addNode($node);
@@ -25,44 +24,44 @@ final class Collection implements CollectionInterface
             $this->isWeighted = false;
         }
 
-        $this->storage->attach($node);
+        $this->nodes->attach($node);
 
         return $this;
     }
 
     public function getNode(int $index): Node
     {
-        if ($index > $this->storage->count()) {
+        if ($index > $this->nodes->count()) {
             throw new \InvalidArgumentException(
-                sprintf('Cannot find node at index %d', $index)
+                sprintf('Cannot find node at index "%d".', $index)
             );
         }
 
-        $this->storage->rewind();
+        $this->nodes->rewind();
 
         while ($index--) {
-            $this->storage->next();
+            $this->nodes->next();
         }
 
         /** @var Node $node */
-        $node = $this->storage->current();
+        $node = $this->nodes->current();
 
         return $node;
     }
 
     public function hasNode(Node $node): bool
     {
-        return $this->storage->contains($node);
+        return $this->nodes->contains($node);
     }
 
     public function removeNode(Node $node): void
     {
-        $this->storage->detach($node);
+        $this->nodes->detach($node);
     }
 
     public function purge(): void
     {
-        $this->storage->removeAll($this->storage);
+        $this->nodes->removeAll($this->nodes);
     }
 
     public function isWeighted(): bool
@@ -72,12 +71,12 @@ final class Collection implements CollectionInterface
 
     public function isEmpty(): bool
     {
-        return 0 === $this->storage->count();
+        return 0 === $this->nodes->count();
     }
 
     public function count(): int
     {
-        return $this->storage->count();
+        return $this->nodes->count();
     }
 
     /**
@@ -85,11 +84,11 @@ final class Collection implements CollectionInterface
      */
     public function toArray(): array
     {
-        return iterator_to_array($this->storage, false);
+        return iterator_to_array($this->nodes, false);
     }
 
     public function getIterator(): \Traversable
     {
-        return $this->storage;
+        return $this->nodes;
     }
 }

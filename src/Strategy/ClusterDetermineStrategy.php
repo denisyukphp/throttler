@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\Node;
 
 final class ClusterDetermineStrategy implements StrategyInterface
 {
@@ -34,14 +35,14 @@ final class ClusterDetermineStrategy implements StrategyInterface
         }
     }
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if (!isset($context['cluster_name'])) {
-            throw new \RuntimeException('Required parameter "cluster_name" is missing.');
+            throw new \LogicException('Required parameter "cluster_name" is missing.');
         }
 
         if (!isset($this->clusterNames[$context['cluster_name']])) {
-            throw new \RuntimeException(
+            throw new \LogicException(
                 sprintf('Cluster name "%s" is undefined.', $context['cluster_name'])
             );
         }
@@ -49,6 +50,6 @@ final class ClusterDetermineStrategy implements StrategyInterface
         /** @var StrategyInterface $strategy */
         $strategy = $this->strategies[$this->clusterNames[$context['cluster_name']]];
 
-        return $strategy->getIndex($collection, $context);
+        return $strategy->getNode($collection, $context);
     }
 }

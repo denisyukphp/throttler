@@ -16,19 +16,21 @@ class MultipleDynamicStrategyTest extends TestCase
 {
     public function testMultipleDynamic(): void
     {
-        $collection = new Collection([
+        $expectedNodes = [
             new Node('node1'),
             new Node('node2'),
             new Node('node3'),
-        ]);
+        ];
+
+        $collection = new Collection($expectedNodes);
 
         $strategy = new MultipleDynamicStrategy(...[
             new RoundRobinStrategy(new InMemoryCounter(start: 0)),
             new RandomStrategy(),
         ]);
 
-        $this->assertSame(0, $strategy->getIndex($collection, ['strategy_name' => RoundRobinStrategy::class]));
-        $this->assertSame(1, $strategy->getIndex($collection, ['strategy_name' => RoundRobinStrategy::class]));
-        $this->assertSame(2, $strategy->getIndex($collection, ['strategy_name' => RoundRobinStrategy::class]));
+        $this->assertSame($expectedNodes[0], $strategy->getNode($collection, ['strategy_name' => RoundRobinStrategy::class]));
+        $this->assertSame($expectedNodes[1], $strategy->getNode($collection, ['strategy_name' => RoundRobinStrategy::class]));
+        $this->assertSame($expectedNodes[2], $strategy->getNode($collection, ['strategy_name' => RoundRobinStrategy::class]));
     }
 }

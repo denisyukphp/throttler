@@ -15,13 +15,15 @@ class ThrottlerTest extends TestCase
     public function testPick(): void
     {
         $throttler = new Throttler(
-            new RandomStrategy()
+            new RandomStrategy(),
         );
 
-        $expectedNode = new Node('node1');
+        $node = new Node('node1');
 
-        $collection = (new Collection())->addNode($expectedNode);
+        $collection = new Collection([
+            $node,
+        ]);
 
-        $this->assertSame($expectedNode, $throttler->pick($collection));
+        $this->assertSame($node, $throttler->pick($collection));
     }
 }

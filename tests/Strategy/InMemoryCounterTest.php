@@ -11,11 +11,11 @@ class InMemoryCounterTest extends TestCase
 {
     public function testNext(): void
     {
-        $inMemoryCounter = new InMemoryCounter(start: 5);
+        $counter = new InMemoryCounter(start: 5);
 
-        $this->assertEquals(5, $inMemoryCounter->next('a'));
-        $this->assertEquals(5, $inMemoryCounter->next('b'));
-        $this->assertEquals(6, $inMemoryCounter->next('a'));
-        $this->assertEquals(6, $inMemoryCounter->next('b'));
+        $this->assertEquals(5, $counter->next('a'));
+        $this->assertEquals(5, $counter->next('b'));
+        $this->assertEquals(6, $counter->next('a'));
+        $this->assertEquals(6, $counter->next('b'));
     }
 }

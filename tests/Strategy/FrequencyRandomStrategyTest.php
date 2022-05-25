@@ -13,24 +13,26 @@ class FrequencyRandomStrategyTest extends TestCase
 {
     public function testFrequencyRandom(): void
     {
-        $collection = new Collection([
-            new Node('node1'),
-            new Node('node2'),
-            new Node('node3'),
-        ]);
+        $nodes = [
+            'node1' => new Node('node1'),
+            'node2' => new Node('node2'),
+            'node3' => new Node('node3'),
+        ];
+
+        $collection = new Collection($nodes);
 
         $strategy = new FrequencyRandomStrategy(frequency: 0.8, depth: 0.2);
 
         $indexes = [];
 
         for ($i = 0; $i < 1000; $i++) {
-            $index = $strategy->getIndex($collection);
+            $node = $strategy->getNode($collection);
 
-            if (!isset($indexes[$index])) {
-                $indexes[$index] = 0;
+            if (!isset($indexes[$node->name])) {
+                $indexes[$node->name] = 0;
             }
 
-            $indexes[$index]++;
+            $indexes[$node->name]++;
         }
 
         $this->assertCount(3, $indexes);
@@ -40,7 +42,7 @@ class FrequencyRandomStrategyTest extends TestCase
         }
 
         $this->assertEquals(1000, array_sum($indexes));
-        $this->assertGreaterThan($indexes[1], $indexes[0]);
-        $this->assertGreaterThan($indexes[2], $indexes[0]);
+        $this->assertGreaterThan($indexes['node2'], $indexes['node1']);
+        $this->assertGreaterThan($indexes['node3'], $indexes['node1']);
     }
 }

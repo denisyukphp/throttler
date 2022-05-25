@@ -6,6 +6,7 @@ namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
+use Orangesoft\Throttler\Collection\Node;
 
 final class FrequencyRandomStrategy implements StrategyInterface
 {
@@ -15,10 +16,10 @@ final class FrequencyRandomStrategy implements StrategyInterface
     ) {
     }
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if ($collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+            throw new EmptyCollectionException();
         }
 
         $total = count($collection);
@@ -27,7 +28,7 @@ final class FrequencyRandomStrategy implements StrategyInterface
 
         $index = $this->isChance($this->frequency) ? mt_rand(1, $low) : mt_rand($high, $total);
 
-        return $index - 1;
+        return $collection->getNode($index - 1);
     }
 
     private function isChance(float $frequency): bool

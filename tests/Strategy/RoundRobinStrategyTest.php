@@ -12,15 +12,18 @@ use PHPUnit\Framework\TestCase;
 
 class RoundRobinStrategyTest extends TestCase
 {
-    private Collection $collection;
+    /**
+     * @var array<int, Node>
+     */
+    private array $expectedNodes;
 
     public function setUp(): void
     {
-        $this->collection = new Collection([
+        $this->expectedNodes = [
             new Node('node1'),
             new Node('node2'),
             new Node('node3'),
-        ]);
+        ];
     }
 
     /**
@@ -28,27 +31,28 @@ class RoundRobinStrategyTest extends TestCase
      */
     public function testRoundRobin(): InMemoryCounter
     {
-        $inMemoryCounter = new InMemoryCounter(start: 0);
+        $counter = new InMemoryCounter(start: 0);
+        $strategy = new RoundRobinStrategy($counter);
+        $collection = new Collection($this->expectedNodes);
 
-        $strategy = new RoundRobinStrategy($inMemoryCounter);
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[1], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[2], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
 
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
-        $this->assertEquals(1, $strategy->getIndex($this->collection));
-        $this->assertEquals(2, $strategy->getIndex($this->collection));
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
-
-        return $inMemoryCounter;
+        return $counter;
     }
 
     /**
      * @depends testRoundRobin
      */
-    public function testRoundRobinRestart(InMemoryCounter $inMemoryCounter): void
+    public function testRoundRobinRestart(InMemoryCounter $counter): void
     {
-        $strategy = new RoundRobinStrategy($inMemoryCounter);
+        $strategy = new RoundRobinStrategy($counter);
+        $collection = new Collection($this->expectedNodes);
 
-        $this->assertEquals(1, $strategy->getIndex($this->collection));
-        $this->assertEquals(2, $strategy->getIndex($this->collection));
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertSame($this->expectedNodes[1], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[2], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
     }
 }

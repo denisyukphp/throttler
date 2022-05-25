@@ -6,15 +6,18 @@ namespace Orangesoft\Throttler\Strategy;
 
 use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
+use Orangesoft\Throttler\Collection\Node;
 
 final class RandomStrategy implements StrategyInterface
 {
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if ($collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+            throw new EmptyCollectionException();
         }
 
-        return mt_rand(0, count($collection) - 1);
+        $index = mt_rand(0, count($collection) - 1);
+
+        return $collection->getNode($index);
     }
 }

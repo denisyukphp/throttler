@@ -20,14 +20,14 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
     ) {
     }
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if ($collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+            throw new EmptyCollectionException();
         }
 
         if (!$collection->isWeighted()) {
-            throw new UnweightedCollectionException('All nodes in the collection must be weighted.');
+            throw new UnweightedCollectionException();
         }
 
         if (0 === $this->gcd) {
@@ -52,7 +52,7 @@ final class WeightedRoundRobinStrategy implements StrategyInterface
             $node = $collection->getNode($index);
 
             if ($node->weight >= $this->currentWeight) {
-                return $index;
+                return $node;
             }
         }
     }

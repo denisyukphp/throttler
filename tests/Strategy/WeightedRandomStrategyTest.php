@@ -13,24 +13,26 @@ class WeightedRandomStrategyTest extends TestCase
 {
     public function testWeightedRandom(): void
     {
-        $collection = new Collection([
-            new Node('node1', 10),
-            new Node('node2', 5),
-            new Node('node3', 1),
-        ]);
+        $nodes = [
+            'node1' => new Node('node1', 10),
+            'node2' => new Node('node2', 5),
+            'node3' => new Node('node3', 1),
+        ];
+
+        $collection = new Collection($nodes);
 
         $strategy = new WeightedRandomStrategy();
 
         $indexes = [];
 
         for ($i = 0; $i < 1000; $i++) {
-            $index = $strategy->getIndex($collection);
+            $node = $strategy->getNode($collection);
 
-            if (!isset($indexes[$index])) {
-                $indexes[$index] = 0;
+            if (!isset($indexes[$node->name])) {
+                $indexes[$node->name] = 0;
             }
 
-            $indexes[$index]++;
+            $indexes[$node->name]++;
         }
 
         $this->assertCount(3, $indexes);
@@ -40,7 +42,7 @@ class WeightedRandomStrategyTest extends TestCase
         }
 
         $this->assertEquals(1000, array_sum($indexes));
-        $this->assertGreaterThan($indexes[1], $indexes[0]);
-        $this->assertGreaterThan($indexes[2], $indexes[1]);
+        $this->assertGreaterThan($indexes['node2'], $indexes['node1']);
+        $this->assertGreaterThan($indexes['node3'], $indexes['node2']);
     }
 }

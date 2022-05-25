@@ -12,12 +12,12 @@ class CollectionTest extends TestCase
 {
     public function testAddNode(): void
     {
-        $collection = (new Collection())
-            ->addNode(new Node('node1'))
-            ->addNode(new Node('node2'))
-            ->addNode(new Node('node3'))
-            ->addNode(new Node('node4'))
-        ;
+        $collection = new Collection([
+            new Node('node1'),
+            new Node('node2'),
+            new Node('node3'),
+            new Node('node4'),
+        ]);
 
         $this->assertCount(4, $collection);
     }
@@ -39,7 +39,9 @@ class CollectionTest extends TestCase
     {
         $node = new Node('node1');
 
-        $collection = (new Collection())->addNode($node);
+        $collection = new Collection([
+            $node,
+        ]);
 
         $this->assertTrue($collection->hasNode($node));
     }
@@ -48,7 +50,9 @@ class CollectionTest extends TestCase
     {
         $node = new Node('node1');
 
-        $collection = (new Collection())->addNode($node);
+        $collection = new Collection([
+            $node,
+        ]);
 
         $collection->removeNode($node);
 

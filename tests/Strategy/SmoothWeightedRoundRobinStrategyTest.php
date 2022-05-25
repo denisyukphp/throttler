@@ -11,25 +11,29 @@ use PHPUnit\Framework\TestCase;
 
 class SmoothWeightedRoundRobinStrategyTest extends TestCase
 {
-    private Collection $collection;
+    /**
+     * @var array<int, Node>
+     */
+    private array $expectedNodes;
 
     public function setUp(): void
     {
-        $this->collection = new Collection([
+        $this->expectedNodes = [
             new Node('node1', 5),
             new Node('node2', 1),
             new Node('node3', 1),
-        ]);
+        ];
     }
 
     public function testSmoothWeightedRoundRobin(): string
     {
         $strategy = new SmoothWeightedRoundRobinStrategy();
+        $collection = new Collection($this->expectedNodes);
 
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
-        $this->assertEquals(1, $strategy->getIndex($this->collection));
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[1], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
 
         return serialize($strategy);
     }
@@ -41,9 +45,10 @@ class SmoothWeightedRoundRobinStrategyTest extends TestCase
     {
         /** @var SmoothWeightedRoundRobinStrategy $strategy */
         $strategy = unserialize($serializedStrategy);
+        $collection = new Collection($this->expectedNodes);
 
-        $this->assertEquals(2, $strategy->getIndex($this->collection));
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
-        $this->assertEquals(0, $strategy->getIndex($this->collection));
+        $this->assertSame($this->expectedNodes[2], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
+        $this->assertSame($this->expectedNodes[0], $strategy->getNode($collection));
     }
 }

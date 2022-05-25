@@ -18,16 +18,18 @@ class ClusterTest extends TestCase
     {
         $throttler = new Throttler(
             new RoundRobinStrategy(
-                new InMemoryCounter()
+                new InMemoryCounter(),
             )
         );
 
-        $expectedNode = new Node('node1');
+        $node = new Node('node1');
 
-        $collection = (new Collection())->addNode($expectedNode);
+        $collection = new Collection([
+            $node,
+        ]);
 
         $cluster = new Cluster('cluster1', $collection);
 
-        $this->assertSame($expectedNode, $cluster->balance($throttler));
+        $this->assertSame($node, $cluster->balance($throttler));
     }
 }

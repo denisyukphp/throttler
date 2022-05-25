@@ -13,14 +13,14 @@ final class WeightedRandomStrategy implements StrategyInterface
 {
     private int $sumWeight = 0;
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if ($collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+            throw new EmptyCollectionException();
         }
 
         if (!$collection->isWeighted()) {
-            throw new UnweightedCollectionException('All nodes in the collection must be weighted.');
+            throw new UnweightedCollectionException();
         }
 
         $currentWeight = 0;
@@ -31,12 +31,12 @@ final class WeightedRandomStrategy implements StrategyInterface
 
         $randomWeight = mt_rand(1, $this->sumWeight);
 
-        /** @var array<int, Node> $collection*/
+        /** @var array<int, Node> $collection */
         foreach ($collection as $index => $node) {
             $currentWeight += $node->weight;
 
             if ($randomWeight <= $currentWeight) {
-                return $index;
+                return $collection->getNode($index);
             }
         }
 

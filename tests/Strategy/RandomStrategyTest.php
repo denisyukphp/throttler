@@ -13,24 +13,26 @@ class RandomStrategyTest extends TestCase
 {
     public function testRandom(): void
     {
-        $collection = new Collection([
-            new Node('node1'),
-            new Node('node2'),
-            new Node('node3'),
-        ]);
+        $nodes = [
+            'node1' => new Node('node1'),
+            'node2' => new Node('node2'),
+            'node3' => new Node('node3'),
+        ];
+
+        $collection = new Collection($nodes);
 
         $strategy = new RandomStrategy();
 
         $indexes = [];
 
         for ($i = 0; $i < 1000; $i++) {
-            $index = $strategy->getIndex($collection);
+            $node = $strategy->getNode($collection);
 
-            if (!isset($indexes[$index])) {
-                $indexes[$index] = 0;
+            if (!isset($indexes[$node->name])) {
+                $indexes[$node->name] = 0;
             }
 
-            $indexes[$index]++;
+            $indexes[$node->name]++;
         }
 
         $this->assertCount(3, $indexes);

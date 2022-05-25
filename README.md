@@ -33,7 +33,7 @@ use Orangesoft\Throttler\Throttler;
 
 $throttler = new Throttler(
     new WeightedRoundRobinStrategy(
-        new InMemoryCounter(start: 0)
+        new InMemoryCounter(start: 0),
     )
 );
 

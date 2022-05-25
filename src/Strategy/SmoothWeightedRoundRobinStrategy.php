@@ -20,14 +20,14 @@ final class SmoothWeightedRoundRobinStrategy implements StrategyInterface
      */
     private array $currentWeights = [];
 
-    public function getIndex(CollectionInterface $collection, array $context = []): int
+    public function getNode(CollectionInterface $collection, array $context = []): Node
     {
         if ($collection->isEmpty()) {
-            throw new EmptyCollectionException('Collection of nodes must not be empty.');
+            throw new EmptyCollectionException();
         }
 
         if (!$collection->isWeighted()) {
-            throw new UnweightedCollectionException('All nodes in the collection must be weighted.');
+            throw new UnweightedCollectionException();
         }
 
         if (0 === count($this->weights) || 0 === count($this->currentWeights)) {
@@ -41,7 +41,7 @@ final class SmoothWeightedRoundRobinStrategy implements StrategyInterface
 
         $this->recalculateCurrentWeights($maxCurrentWeightIndex);
 
-        return $maxCurrentWeightIndex;
+        return $collection->getNode($maxCurrentWeightIndex);
     }
 
     private function getMaxCurrentWeightIndex(): int
