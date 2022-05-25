@@ -25,7 +25,7 @@ class RandomBench
         ]);
 
         $this->throttler = new Throttler(
-            new RandomStrategy()
+            new RandomStrategy(),
         );
     }
 

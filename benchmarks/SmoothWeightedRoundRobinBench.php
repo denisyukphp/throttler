@@ -25,7 +25,7 @@ class SmoothWeightedRoundRobinBench
         ]);
 
         $this->throttler = new Throttler(
-            new SmoothWeightedRoundRobinStrategy()
+            new SmoothWeightedRoundRobinStrategy(),
         );
     }
 

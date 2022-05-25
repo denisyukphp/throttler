@@ -25,7 +25,7 @@ class WeightedRandomBench
         ]);
 
         $this->throttler = new Throttler(
-            new WeightedRandomStrategy()
+            new WeightedRandomStrategy(),
         );
     }
 

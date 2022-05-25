@@ -27,7 +27,7 @@ class RoundRobinBench
 
         $this->throttler = new Throttler(
             new RoundRobinStrategy(
-                new InMemoryCounter()
+                new InMemoryCounter(start: 0),
             )
         );
     }

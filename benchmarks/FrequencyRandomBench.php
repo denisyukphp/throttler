@@ -25,7 +25,7 @@ class FrequencyRandomBench
         ]);
 
         $this->throttler = new Throttler(
-            new FrequencyRandomStrategy()
+            new FrequencyRandomStrategy(),
         );
     }
 
