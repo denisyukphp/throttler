@@ -1,6 +1,6 @@
 # Throttler
 
-[![Build Status](https://img.shields.io/github/workflow/status/Orangesoft-Development/throttler/build/main?style=plastic)](https://github.com/Orangesoft-Development/throttler/actions/workflows/continuous-integration.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/orangesoft/throttler/ci.yml?branch=master&style=plastic)](https://github.com/orangesoft/throttler/actions/workflows/ci.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/orangesoft/throttler?style=plastic&color=8892BF)](https://packagist.org/packages/orangesoft/throttler)
 [![Total Downloads](https://img.shields.io/packagist/dt/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
@@ -55,18 +55,18 @@ Set weight for Node as the second argument in constructor if you are using weigh
 
 ## Benchmarks
 
-Run `composer bench` to check out benchmarks:
+Run `composer phpbench` to check out benchmarks:
 
 ```text
 +-------------------------------+------+-----+----------+----------+----------+---------+
 | benchmark                     | revs | its | mean     | best     | worst    | stdev   |
 +-------------------------------+------+-----+----------+----------+----------+---------+
-| RandomBench                   | 1000 | 5   | 4.002μs  | 3.880μs  | 4.097μs  | 0.073μs |
-| WeightedRandomBench           | 1000 | 5   | 11.660μs | 11.533μs | 11.797μs | 0.094μs |
 | FrequencyRandomBench          | 1000 | 5   | 6.074μs  | 5.924μs  | 6.242μs  | 0.139μs |
+| RandomBench                   | 1000 | 5   | 4.002μs  | 3.880μs  | 4.097μs  | 0.073μs |
 | RoundRobinBench               | 1000 | 5   | 4.060μs  | 3.888μs  | 4.363μs  | 0.171μs |
-| WeightedRoundRobinBench       | 1000 | 5   | 10.778μs | 10.655μs | 10.919μs | 0.115μs |
 | SmoothWeightedRoundRobinBench | 1000 | 5   | 6.888μs  | 6.707μs  | 7.102μs  | 0.130μs |
+| WeightedRandomBench           | 1000 | 5   | 11.660μs | 11.533μs | 11.797μs | 0.094μs |
+| WeightedRoundRobinBench       | 1000 | 5   | 10.778μs | 10.655μs | 10.919μs | 0.115μs |
 +-------------------------------+------+-----+----------+----------+----------+---------+
 ```
 

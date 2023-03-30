@@ -32,9 +32,7 @@ final class Collection implements CollectionInterface
     public function getNode(int $index): Node
     {
         if ($index > $this->nodes->count()) {
-            throw new \InvalidArgumentException(
-                sprintf('Cannot find node at index "%d".', $index)
-            );
+            throw new \InvalidArgumentException(sprintf('Cannot find node at index "%d".', $index));
         }
 
         $this->nodes->rewind();

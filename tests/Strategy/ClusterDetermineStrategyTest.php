@@ -8,9 +8,9 @@ use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Strategy\ClusterDetermineStrategy;
 use Orangesoft\Throttler\Strategy\ClusterSet;
-use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
-use Orangesoft\Throttler\Strategy\RandomStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use Orangesoft\Throttler\Strategy\RandomStrategy;
+use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
 use PHPUnit\Framework\TestCase;
 
 class ClusterDetermineStrategyTest extends TestCase

@@ -28,18 +28,11 @@ final class MultipleDynamicStrategy implements StrategyInterface
         }
 
         if (!class_exists($context['strategy_name']) || !is_a($context['strategy_name'], StrategyInterface::class, true)) {
-            throw new \LogicException(
-                vsprintf('Strategy must be a class that exists and implements "%s" interface, "%s" given.', [
-                    StrategyInterface::class,
-                    $context['strategy_name'],
-                ])
-            );
+            throw new \LogicException(sprintf('Strategy must be a class that exists and implements "%s" interface, "%s" given.', StrategyInterface::class, $context['strategy_name']));
         }
 
         if (!isset($this->pool[$context['strategy_name']])) {
-            throw new \LogicException(
-                sprintf('Strategy "%s" is undefined.', $context['strategy_name'])
-            );
+            throw new \LogicException(sprintf('Strategy "%s" is undefined.', $context['strategy_name']));
         }
 
         /** @var StrategyInterface $strategy */

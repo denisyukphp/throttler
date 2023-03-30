@@ -25,9 +25,7 @@ final class ClusterDetermineStrategy implements StrategyInterface
 
             foreach ($clusterSet->clusterNames as $clusterName) {
                 if (isset($this->clusterNames[$clusterName])) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Cluster "%s" has already been added.', $clusterName)
-                    );
+                    throw new \InvalidArgumentException(sprintf('Cluster "%s" has already been added.', $clusterName));
                 }
 
                 $this->clusterNames[$clusterName] = $key;
@@ -42,9 +40,7 @@ final class ClusterDetermineStrategy implements StrategyInterface
         }
 
         if (!isset($this->clusterNames[$context['cluster_name']])) {
-            throw new \LogicException(
-                sprintf('Cluster name "%s" is undefined.', $context['cluster_name'])
-            );
+            throw new \LogicException(sprintf('Cluster name "%s" is undefined.', $context['cluster_name']));
         }
 
         /** @var StrategyInterface $strategy */

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Strategy;
 
-use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
 use Orangesoft\Throttler\Collection\Exception\EmptyCollectionException;
+use Orangesoft\Throttler\Collection\Exception\UnweightedCollectionException;
+use Orangesoft\Throttler\Collection\Node;
 
 final class WeightedRandomStrategy implements StrategyInterface
 {

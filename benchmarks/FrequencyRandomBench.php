@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Benchmarks;
 
-use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Strategy\FrequencyRandomStrategy;
-use Orangesoft\Throttler\ThrottlerInterface;
 use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\ThrottlerInterface;
 
 class FrequencyRandomBench
 {
@@ -31,6 +31,7 @@ class FrequencyRandomBench
 
     /**
      * @Revs(1000)
+     *
      * @Iterations(5)
      */
     public function benchFrequencyRandom(): void

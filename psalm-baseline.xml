@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+  <file src="src/Collection/Collection.php">
+    <LessSpecificReturnStatement occurrences="1">
+      <code>iterator_to_array($this-&gt;nodes, false)</code>
+    </LessSpecificReturnStatement>
+    <MixedArgument occurrences="1">
+      <code>$node</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="1">
+      <code>$node</code>
+    </MixedAssignment>
+    <MoreSpecificReturnType occurrences="1">
+      <code>Node[]</code>
+    </MoreSpecificReturnType>
+  </file>
+  <file src="src/Collection/Sorter.php">
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$callback</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/Strategy/ClusterDetermineStrategy.php">
+    <MixedArgument occurrences="1">
+      <code>$context['cluster_name']</code>
+    </MixedArgument>
+    <MixedArrayOffset occurrences="2">
+      <code>$this-&gt;clusterNames[$context['cluster_name']]</code>
+      <code>$this-&gt;clusterNames[$context['cluster_name']]</code>
+    </MixedArrayOffset>
+    <MixedPropertyTypeCoercion occurrences="2">
+      <code>$this-&gt;clusterNames</code>
+      <code>$this-&gt;strategies</code>
+    </MixedPropertyTypeCoercion>
+    <UnnecessaryVarAnnotation occurrences="1">
+      <code>StrategyInterface</code>
+    </UnnecessaryVarAnnotation>
+  </file>
+  <file src="src/Strategy/MultipleDynamicStrategy.php">
+    <MixedArgument occurrences="1">
+      <code>$context['strategy_name']</code>
+    </MixedArgument>
+    <UnnecessaryVarAnnotation occurrences="1">
+      <code>StrategyInterface</code>
+    </UnnecessaryVarAnnotation>
+  </file>
+  <file src="src/Strategy/RoundRobinStrategy.php">
+    <MixedArgument occurrences="1">
+      <code>$context['counter_name'] ?? self::class</code>
+    </MixedArgument>
+  </file>
+  <file src="src/Strategy/SmoothWeightedRoundRobinStrategy.php">
+    <ArgumentTypeCoercion occurrences="1">
+      <code>$this-&gt;currentWeights</code>
+    </ArgumentTypeCoercion>
+    <PossiblyInvalidMethodCall occurrences="1">
+      <code>getNode</code>
+    </PossiblyInvalidMethodCall>
+  </file>
+  <file src="src/Strategy/WeightedRandomStrategy.php">
+    <InvalidMethodCall occurrences="1">
+      <code>getNode</code>
+    </InvalidMethodCall>
+    <MixedInferredReturnType occurrences="1">
+      <code>Node</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>$collection-&gt;getNode($index)</code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/Strategy/WeightedRoundRobinStrategy.php">
+    <MixedArgument occurrences="1">
+      <code>$context['counter_name'] ?? self::class</code>
+    </MixedArgument>
+  </file>
+  <file src="tests/Collection/CollectionTest.php">
+    <RedundantCondition occurrences="1">
+      <code>assertIsIterable</code>
+    </RedundantCondition>
+  </file>
+</files>

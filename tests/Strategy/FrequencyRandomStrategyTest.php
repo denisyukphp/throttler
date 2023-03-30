@@ -25,14 +25,14 @@ class FrequencyRandomStrategyTest extends TestCase
 
         $indexes = [];
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 1000; ++$i) {
             $node = $strategy->getNode($collection);
 
             if (!isset($indexes[$node->name])) {
                 $indexes[$node->name] = 0;
             }
 
-            $indexes[$node->name]++;
+            ++$indexes[$node->name];
         }
 
         $this->assertCount(3, $indexes);

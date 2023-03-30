@@ -1,0 +1,17 @@
+* text=auto
+
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.github/ export-ignore
+/.gitignore export-ignore
+/.phpbench.json export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/README.md export-ignore
+/benchmarks/ export-ignore
+/build/ export-ignore
+/composer.lock export-ignore
+/docs/ export-ignore
+/phpunit.xml.dist export-ignore
+/psalm-baseline.xml export-ignore
+/psalm.xml export-ignore
+/tests/ export-ignore

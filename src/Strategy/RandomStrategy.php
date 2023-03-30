@@ -16,7 +16,7 @@ final class RandomStrategy implements StrategyInterface
             throw new EmptyCollectionException();
         }
 
-        $index = mt_rand(0, count($collection) - 1);
+        $index = mt_rand(0, \count($collection) - 1);
 
         return $collection->getNode($index);
     }

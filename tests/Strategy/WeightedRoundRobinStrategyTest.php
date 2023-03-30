@@ -17,7 +17,7 @@ class WeightedRoundRobinStrategyTest extends TestCase
      */
     private array $expectedNodes;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->expectedNodes = [
             new Node('node1', 5),

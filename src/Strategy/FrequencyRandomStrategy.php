@@ -22,7 +22,7 @@ final class FrequencyRandomStrategy implements StrategyInterface
             throw new EmptyCollectionException();
         }
 
-        $total = count($collection);
+        $total = \count($collection);
         $low = (int) ceil($this->depth * $total);
         $high = $low + ((1 < $total) ? 1 : 0);
 

@@ -17,7 +17,7 @@ class RoundRobinStrategyTest extends TestCase
      */
     private array $expectedNodes;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->expectedNodes = [
             new Node('node1'),
@@ -26,9 +26,6 @@ class RoundRobinStrategyTest extends TestCase
         ];
     }
 
-    /**
-     * @return InMemoryCounter
-     */
     public function testRoundRobin(): InMemoryCounter
     {
         $counter = new InMemoryCounter(start: 0);

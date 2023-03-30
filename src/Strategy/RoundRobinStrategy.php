@@ -21,7 +21,7 @@ final class RoundRobinStrategy implements StrategyInterface
             throw new EmptyCollectionException();
         }
 
-        $index = $this->counter->next($context['counter_name'] ?? self::class) % count($collection);
+        $index = $this->counter->next($context['counter_name'] ?? self::class) % \count($collection);
 
         return $collection->getNode($index);
     }

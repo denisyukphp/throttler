@@ -7,7 +7,15 @@
             "extends": "aggregate",
             "title": "Throttler benchmarks",
             "description": "How long strategies take to load balancing",
-            "cols": ["benchmark", "revs", "its", "mean", "best", "worst", "stdev"]
+            "cols": [
+                "benchmark",
+                "revs",
+                "its",
+                "mean",
+                "best",
+                "worst",
+                "stdev"
+            ]
         }
     }
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Tests\Collection;
 
-use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Collection\Collection;
-use Orangesoft\Throttler\Collection\Sorter;
 use Orangesoft\Throttler\Collection\Asc;
+use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Desc;
+use Orangesoft\Throttler\Collection\Node;
+use Orangesoft\Throttler\Collection\Sorter;
 use PHPUnit\Framework\TestCase;
 
 class SorterTest extends TestCase

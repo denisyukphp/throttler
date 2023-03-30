@@ -6,10 +6,10 @@ namespace Orangesoft\Throttler\Tests\Strategy;
 
 use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Strategy\MultipleDynamicStrategy;
-use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
-use Orangesoft\Throttler\Strategy\RandomStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
+use Orangesoft\Throttler\Strategy\MultipleDynamicStrategy;
+use Orangesoft\Throttler\Strategy\RandomStrategy;
+use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
 use PHPUnit\Framework\TestCase;
 
 class MultipleDynamicStrategyTest extends TestCase

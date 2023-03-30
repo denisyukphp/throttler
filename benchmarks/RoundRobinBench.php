@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Benchmarks;
 
-use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Collection;
+use Orangesoft\Throttler\Collection\CollectionInterface;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
 use Orangesoft\Throttler\Strategy\InMemoryCounter;
-use Orangesoft\Throttler\ThrottlerInterface;
+use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
 use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\ThrottlerInterface;
 
 class RoundRobinBench
 {
@@ -34,6 +34,7 @@ class RoundRobinBench
 
     /**
      * @Revs(1000)
+     *
      * @Iterations(5)
      */
     public function benchRoundRobin(): void
