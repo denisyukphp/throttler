@@ -28,7 +28,7 @@ final class MultipleDynamicStrategy implements StrategyInterface
         }
 
         if (!class_exists($context['strategy_name']) || !is_a($context['strategy_name'], StrategyInterface::class, true)) {
-            throw new \LogicException(sprintf('Strategy must be a class that exists and implements "%s" interface, "%s" given.', StrategyInterface::class, $context['strategy_name']));
+            throw new \LogicException(sprintf('Strategy must be a class that exists and implements "%s" interface, "%s" given.', StrategyInterface::class, get_debug_type($context['strategy_name'])));
         }
 
         if (!isset($this->pool[$context['strategy_name']])) {
