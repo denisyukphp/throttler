@@ -1,6 +1,6 @@
 # Throttler
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/orangesoft/throttler/ci.yml?branch=master&style=plastic)](https://github.com/orangesoft/throttler/actions/workflows/ci.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/denisyukphp/throttler/ci.yml?branch=main&style=plastic)](https://github.com/denisyukphp/throttler/actions/workflows/ci.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/orangesoft/throttler?style=plastic&color=8892BF)](https://packagist.org/packages/orangesoft/throttler)
 [![Total Downloads](https://img.shields.io/packagist/dt/orangesoft/throttler?style=plastic)](https://packagist.org/packages/orangesoft/throttler)
