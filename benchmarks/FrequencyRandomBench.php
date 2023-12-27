@@ -4,29 +4,26 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Benchmarks;
 
-use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\InMemoryCollection;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Strategy\FrequencyRandomStrategy;
-use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\FrequencyRandomThrottler;
 use Orangesoft\Throttler\ThrottlerInterface;
 
-class FrequencyRandomBench
+final class FrequencyRandomBench
 {
     private CollectionInterface $collection;
     private ThrottlerInterface $throttler;
 
     public function __construct()
     {
-        $this->collection = new Collection([
+        $this->collection = new InMemoryCollection([
             new Node('node1'),
             new Node('node2'),
             new Node('node3'),
         ]);
 
-        $this->throttler = new Throttler(
-            new FrequencyRandomStrategy(),
-        );
+        $this->throttler = new FrequencyRandomThrottler();
     }
 
     /**

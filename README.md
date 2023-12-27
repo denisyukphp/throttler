@@ -20,38 +20,60 @@ This package requires PHP 8.1 or later.
 
 ## Quick usage
 
-Configure Throttler as below:
+Configure `Orangesoft\Throttler\WeightedRoundRobinThrottler::class` as below and set weight for each node as the second argument in constructor if you are using weighted strategies:
 
 ```php
 <?php
 
+use Orangesoft\Throttler\Counter\InMemoryCounter;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Collection\Collection;
-use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
-use Orangesoft\Throttler\Strategy\InMemoryCounter;
-use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\WeightedRoundRobinThrottler;
 
-$throttler = new Throttler(
-    new WeightedRoundRobinStrategy(
-        new InMemoryCounter(start: 0),
-    )
+$throttler = new WeightedRoundRobinThrottler(
+    new InMemoryCounter(),
 );
 
-$collection = new Collection([
-    new Node('node1', 5),
-    new Node('node2', 1),
-    new Node('node3', 1),
+$collection = new InMemoryCollection([
+    new Node('192.168.0.1', 5),
+    new Node('192.168.0.2', 1),
+    new Node('192.168.0.3', 1),
 ]);
+```
+Use `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` method to pick node according to the chosen strategy:
 
+```php
 while (true) {
-    /** @var Node $node */
+    /** @var NodeInterface $node */
     $node = $throttler->pick($collection);
-    
+
     // ...
 }
 ```
 
-Set weight for Node as the second argument in constructor if you are using weighted-strategies.
+As a result, the strategy will go through all the nodes and return the appropriate one like below:
+
+```text
++-------------+
+| 192.168.0.1 |
+| 192.168.0.1 |
+| 192.168.0.1 |
+| 192.168.0.1 |
+| 192.168.0.1 |
+| 192.168.0.2 |
+| 192.168.0.3 |
+| etc.        |
++-------------+
+```
+
+The following load balancing strategies are available:
+
+- [Orangesoft\Throttler\RandomThrottler](../src/RandomThrottler.php)
+- [Orangesoft\Throttler\WeightedRandomThrottler](../src/WeightedRandomThrottler.php)
+- [Orangesoft\Throttler\FrequencyRandomThrottler](../src/FrequencyRandomThrottler.php)
+- [Orangesoft\Throttler\RoundRobinThrottler](../src/RoundRobinThrottler.php)
+- [Orangesoft\Throttler\WeightedRoundRobinThrottler](../src/WeightedRoundRobinThrottler.php)
+- [Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler](../src/SmoothWeightedRoundRobinThrottler.php)
 
 ## Benchmarks
 
@@ -61,25 +83,26 @@ Run `composer phpbench` to check out benchmarks:
 +-------------------------------+------+-----+----------+----------+----------+---------+
 | benchmark                     | revs | its | mean     | best     | worst    | stdev   |
 +-------------------------------+------+-----+----------+----------+----------+---------+
-| FrequencyRandomBench          | 1000 | 5   | 6.074μs  | 5.924μs  | 6.242μs  | 0.139μs |
 | RandomBench                   | 1000 | 5   | 4.002μs  | 3.880μs  | 4.097μs  | 0.073μs |
-| RoundRobinBench               | 1000 | 5   | 4.060μs  | 3.888μs  | 4.363μs  | 0.171μs |
-| SmoothWeightedRoundRobinBench | 1000 | 5   | 6.888μs  | 6.707μs  | 7.102μs  | 0.130μs |
 | WeightedRandomBench           | 1000 | 5   | 11.660μs | 11.533μs | 11.797μs | 0.094μs |
+| FrequencyRandomBench          | 1000 | 5   | 6.074μs  | 5.924μs  | 6.242μs  | 0.139μs |
+| RoundRobinBench               | 1000 | 5   | 4.060μs  | 3.888μs  | 4.363μs  | 0.171μs |
 | WeightedRoundRobinBench       | 1000 | 5   | 10.778μs | 10.655μs | 10.919μs | 0.115μs |
+| SmoothWeightedRoundRobinBench | 1000 | 5   | 6.888μs  | 6.707μs  | 7.102μs  | 0.130μs |
 +-------------------------------+------+-----+----------+----------+----------+---------+
 ```
 
-The report is based on measuring the speed. Check `best` column to find out which strategy is the fastest. You can see that the fastest strategies are Random and RoundRobin.
+The report is based on measuring the speed. Check `best` column to find out which strategy is the fastest.
 
 ## Documentation
 
-- [Configure Throttler](docs/index.md#configure-throttler)
-- [Available strategies](docs/index.md#available-strategies)
-- [Sort nodes](docs/index.md#sort-nodes)
-- [Keep counter](docs/index.md#keep-counter)
-- [Serialize strategies](docs/index.md#serialize-strategies)
-- [Dynamically change strategy](docs/index.md#dynamically-change-strategy)
-- [Balance cluster](docs/index.md#balance-cluster)
+- [How it works](docs/index.md##how-it-works)
+- [Available strategies](docs/index.md##available-strategies)
+- [Keep states](docs/index.md##keep-states)
+    - [Counting](docs/index.md##counting)
+    - [Serialization](docs/index.md##serialization)
+- [Choice from multiple](docs/index.md##choice-from-multiple)
+- [Balance cluster](docs/index.md##balance-cluster)
+- [Production example](docs/index.md##production-example)
 
-Read more about usage on [Orangesoft Tech](https://orangesoft.co/blog/how-to-make-proxy-balancing-in-guzzle).
+Read more about [Load Balancing](https://samwho.dev/load-balancing/).

@@ -4,31 +4,28 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Benchmarks;
 
-use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\InMemoryCollection;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Strategy\InMemoryCounter;
-use Orangesoft\Throttler\Strategy\RoundRobinStrategy;
-use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\Counter\InMemoryCounter;
+use Orangesoft\Throttler\RoundRobinThrottler;
 use Orangesoft\Throttler\ThrottlerInterface;
 
-class RoundRobinBench
+final class RoundRobinBench
 {
     private CollectionInterface $collection;
     private ThrottlerInterface $throttler;
 
     public function __construct()
     {
-        $this->collection = new Collection([
+        $this->collection = new InMemoryCollection([
             new Node('node1'),
             new Node('node2'),
             new Node('node3'),
         ]);
 
-        $this->throttler = new Throttler(
-            new RoundRobinStrategy(
-                new InMemoryCounter(start: 0),
-            )
+        $this->throttler = new RoundRobinThrottler(
+            new InMemoryCounter(),
         );
     }
 

@@ -4,29 +4,26 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Benchmarks;
 
-use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\InMemoryCollection;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Strategy\SmoothWeightedRoundRobinStrategy;
-use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler;
 use Orangesoft\Throttler\ThrottlerInterface;
 
-class SmoothWeightedRoundRobinBench
+final class SmoothWeightedRoundRobinBench
 {
     private CollectionInterface $collection;
     private ThrottlerInterface $throttler;
 
     public function __construct()
     {
-        $this->collection = new Collection([
+        $this->collection = new InMemoryCollection([
             new Node('node1', 5),
             new Node('node2', 1),
             new Node('node3', 1),
         ]);
 
-        $this->throttler = new Throttler(
-            new SmoothWeightedRoundRobinStrategy(),
-        );
+        $this->throttler = new SmoothWeightedRoundRobinThrottler();
     }
 
     /**

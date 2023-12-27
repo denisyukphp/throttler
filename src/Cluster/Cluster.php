@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Orangesoft\Throttler\Collection;
+namespace Orangesoft\Throttler\Cluster;
 
+use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\NodeInterface;
 use Orangesoft\Throttler\ThrottlerInterface;
 
 final class Cluster implements ClusterInterface
@@ -14,10 +16,10 @@ final class Cluster implements ClusterInterface
     ) {
     }
 
-    public function balance(ThrottlerInterface $throttler, array $context = []): Node
+    public function balance(ThrottlerInterface $throttler, array $context = []): NodeInterface
     {
         return $throttler->pick($this->collection, array_merge($context, [
-            'cluster_name' => $this->name,
+            'cluster' => $this->name,
         ]));
     }
 }
