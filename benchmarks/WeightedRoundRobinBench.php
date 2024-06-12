@@ -19,22 +19,19 @@ final class WeightedRoundRobinBench
     public function __construct()
     {
         $this->collection = new InMemoryCollection([
-            new Node('node1', 5),
-            new Node('node2', 1),
-            new Node('node3', 1),
+            new Node('192.168.0.1', 5),
+            new Node('192.168.0.2', 1),
+            new Node('192.168.0.3', 1),
         ]);
 
-        $this->throttler = new WeightedRoundRobinThrottler(
-            new InMemoryCounter(),
-        );
+        $this->throttler = new WeightedRoundRobinThrottler(new InMemoryCounter());
     }
 
     /**
      * @Revs(1000)
-     *
      * @Iterations(5)
      */
-    public function benchWeightedRoundRobin(): void
+    public function benchWeightedRoundRobinAlgorithm(): void
     {
         $this->throttler->pick($this->collection);
     }

@@ -18,9 +18,9 @@ final class SmoothWeightedRoundRobinBench
     public function __construct()
     {
         $this->collection = new InMemoryCollection([
-            new Node('node1', 5),
-            new Node('node2', 1),
-            new Node('node3', 1),
+            new Node('192.168.0.1', 5),
+            new Node('192.168.0.2', 1),
+            new Node('192.168.0.3', 1),
         ]);
 
         $this->throttler = new SmoothWeightedRoundRobinThrottler();
@@ -28,10 +28,9 @@ final class SmoothWeightedRoundRobinBench
 
     /**
      * @Revs(1000)
-     *
      * @Iterations(5)
      */
-    public function benchSmoothWeightedRoundRobin(): void
+    public function benchSmoothWeightedRoundRobinAlgorithm(): void
     {
         $this->throttler->pick($this->collection);
     }

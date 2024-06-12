@@ -18,9 +18,9 @@ final class WeightedRandomBench
     public function __construct()
     {
         $this->collection = new InMemoryCollection([
-            new Node('node1', 5),
-            new Node('node2', 1),
-            new Node('node3', 1),
+            new Node('192.168.0.1', 5),
+            new Node('192.168.0.2', 1),
+            new Node('192.168.0.3', 1),
         ]);
 
         $this->throttler = new WeightedRandomThrottler();
@@ -28,10 +28,9 @@ final class WeightedRandomBench
 
     /**
      * @Revs(1000)
-     *
      * @Iterations(5)
      */
-    public function benchWeightedRandom(): void
+    public function benchWeightedRandomAlgorithm(): void
     {
         $this->throttler->pick($this->collection);
     }

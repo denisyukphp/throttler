@@ -19,22 +19,19 @@ final class RoundRobinBench
     public function __construct()
     {
         $this->collection = new InMemoryCollection([
-            new Node('node1'),
-            new Node('node2'),
-            new Node('node3'),
+            new Node('192.168.0.1'),
+            new Node('192.168.0.2'),
+            new Node('192.168.0.3'),
         ]);
 
-        $this->throttler = new RoundRobinThrottler(
-            new InMemoryCounter(),
-        );
+        $this->throttler = new RoundRobinThrottler(new InMemoryCounter());
     }
 
     /**
      * @Revs(1000)
-     *
      * @Iterations(5)
      */
-    public function benchRoundRobin(): void
+    public function benchRoundRobinAlgorithm(): void
     {
         $this->throttler->pick($this->collection);
     }
