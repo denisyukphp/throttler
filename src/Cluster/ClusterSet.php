@@ -6,6 +6,9 @@ namespace Orangesoft\Throttler\Cluster;
 
 use Orangesoft\Throttler\ThrottlerInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class ClusterSet
 {
     /**

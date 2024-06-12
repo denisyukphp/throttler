@@ -27,7 +27,7 @@ final class ClusterPool implements ThrottlerInterface
 
             foreach ($clusterSet->clusterNames as $clusterName) {
                 if (isset($this->clusterNames[$clusterName])) {
-                    throw new \UnexpectedValueException(sprintf('Cluster "%s" has already been added.', $clusterName));
+                    throw new \UnexpectedValueException(sprintf('The cluster "%s" has already been added.', $clusterName)); // @codeCoverageIgnore
                 }
 
                 $this->clusterNames[$clusterName] = $id;
@@ -38,15 +38,15 @@ final class ClusterPool implements ThrottlerInterface
     public function pick(CollectionInterface $collection, array $context = []): NodeInterface
     {
         if (!isset($context['cluster'])) {
-            throw new \RuntimeException('The parameter "cluster" is required.');
+            throw new \RuntimeException('Required parameter "cluster" is missing.'); // @codeCoverageIgnore
         }
 
         if (!\is_string($context['cluster'])) {
-            throw new \RuntimeException('The parameter "cluster" must be as a string.');
+            throw new \RuntimeException('The parameter "cluster" must be as a string.'); // @codeCoverageIgnore
         }
 
         if (!isset($this->clusterNames[$context['cluster']])) {
-            throw new \RuntimeException(sprintf('The cluster "%s" is undefined.', $context['cluster']));
+            throw new \RuntimeException(sprintf('The cluster "%s" is undefined.', $context['cluster'])); // @codeCoverageIgnore
         }
 
         $throttler = $this->throttlers[$this->clusterNames[$context['cluster']]];

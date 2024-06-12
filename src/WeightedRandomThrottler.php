@@ -9,10 +9,13 @@ use Orangesoft\Throttler\Collection\NodeInterface;
 
 final class WeightedRandomThrottler implements ThrottlerInterface
 {
+    /**
+     * @param array<string, mixed> $context
+     */
     public function pick(CollectionInterface $collection, array $context = []): NodeInterface
     {
         if ($collection->isEmpty()) {
-            throw new \RuntimeException('Collection of nodes mustn\'t be empty.');
+            throw new \RuntimeException('Collection of nodes mustn\'t be empty.'); // @codeCoverageIgnore
         }
 
         $currentWeight = 0;
@@ -21,7 +24,7 @@ final class WeightedRandomThrottler implements ThrottlerInterface
 
         foreach ($collection as $node) {
             if (0 == $node->getWeight()) {
-                throw new \RuntimeException('All nodes in the collection must be weighted.');
+                throw new \RuntimeException('All nodes in the collection must be weighted.'); // @codeCoverageIgnore
             }
 
             $currentWeight += $node->getWeight();
@@ -31,6 +34,6 @@ final class WeightedRandomThrottler implements ThrottlerInterface
             }
         }
 
-        throw new \RuntimeException('You never will catch this exception.');
+        throw new \RuntimeException('You never will catch this exception.'); // @codeCoverageIgnore
     }
 }

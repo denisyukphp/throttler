@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Collection;
 
+/**
+ * @template T of NodeInterface
+ */
 final class InMemoryCollection implements CollectionInterface
 {
     /**
@@ -72,9 +75,14 @@ final class InMemoryCollection implements CollectionInterface
         return new self($self->toArray());
     }
 
+    /**
+     * @param callable(T, T): int $callback
+     */
     public function sort(callable $callback): self
     {
         $nodes = $this->toArray();
+
+        /** @psalm-suppress InvalidArgument */
         usort($nodes, $callback);
 
         return new self($nodes);
@@ -82,7 +90,7 @@ final class InMemoryCollection implements CollectionInterface
 
     public function isEmpty(): bool
     {
-        return 0 == $this->count();
+        return 0 === $this->count();
     }
 
     public function count(): int
@@ -91,14 +99,18 @@ final class InMemoryCollection implements CollectionInterface
     }
 
     /**
-     * @return NodeInterface[]
+     * @return array<int, NodeInterface>
      */
     public function toArray(): array
     {
         return $this->nodes;
     }
 
-    public function getIterator(): \Traversable
+    /**
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @return \ArrayIterator<int, NodeInterface>
+     */
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->nodes);
     }

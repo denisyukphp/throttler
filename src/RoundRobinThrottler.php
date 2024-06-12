@@ -15,10 +15,17 @@ final class RoundRobinThrottler implements ThrottlerInterface
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function pick(CollectionInterface $collection, array $context = []): NodeInterface
     {
         if ($collection->isEmpty()) {
-            throw new \RuntimeException('Collection of nodes mustn\'t be empty.');
+            throw new \RuntimeException('Collection of nodes mustn\'t be empty.'); // @codeCoverageIgnore
+        }
+
+        if (isset($context['counter']) && !\is_string($context['counter'])) {
+            throw new \RuntimeException(sprintf('The parameter "counter" must be as string, %s given.', get_debug_type($context['counter']))); // @codeCoverageIgnore
         }
 
         $counter = $context['counter'] ?? spl_object_hash($collection);

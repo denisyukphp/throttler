@@ -9,5 +9,8 @@ use Orangesoft\Throttler\ThrottlerInterface;
 
 interface ClusterInterface
 {
+    /**
+     * @param array<string, mixed> $context
+     */
     public function balance(ThrottlerInterface $throttler, array $context = []): NodeInterface;
 }

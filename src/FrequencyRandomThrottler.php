@@ -15,10 +15,13 @@ final class FrequencyRandomThrottler implements ThrottlerInterface
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function pick(CollectionInterface $collection, array $context = []): NodeInterface
     {
         if ($collection->isEmpty()) {
-            throw new \RuntimeException('Collection of nodes mustn\'t be empty.');
+            throw new \RuntimeException('Collection of nodes mustn\'t be empty.'); // @codeCoverageIgnore
         }
 
         $total = \count($collection);

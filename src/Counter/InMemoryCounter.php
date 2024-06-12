@@ -11,10 +11,15 @@ final class InMemoryCounter implements CounterInterface
      */
     private array $counter = [];
 
-    public function next(string $name = 'default', int $start = 0): int
+    public function __construct(
+        private int $start = 0,
+    ) {
+    }
+
+    public function next(string $name = 'default'): int
     {
         if (!isset($this->counter[$name])) {
-            $this->counter[$name] = $start;
+            $this->counter[$name] = $this->start;
         }
 
         $next = $this->counter[$name];
