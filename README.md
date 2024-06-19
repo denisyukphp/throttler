@@ -20,7 +20,7 @@ This package requires PHP 8.1 or later.
 
 ## Quick usage
 
-Configure `Orangesoft\Throttler\WeightedRoundRobinThrottler::class` as below and set weight for each node as the second argument in constructor if you are using weighted strategies:
+Configure `Orangesoft\Throttler\WeightedRoundRobinThrottler::class` as below and set weight for each node if you are using weighted strategy:
 
 ```php
 <?php
@@ -39,10 +39,7 @@ $collection = new InMemoryCollection([
     new Node('192.168.0.2', 1),
     new Node('192.168.0.3', 1),
 ]);
-```
-Use `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` method to pick node according to the chosen strategy:
 
-```php
 while (true) {
     /** @var NodeInterface $node */
     $node = $throttler->pick($collection);
@@ -51,29 +48,31 @@ while (true) {
 }
 ```
 
-As a result, the strategy will go through all the nodes and return the appropriate one like below:
+As a result, the throttler will go through all the nodes and return the appropriate one according to the chosen strategy, as shown below:
 
 ```text
-+-------------+
-| 192.168.0.1 |
-| 192.168.0.1 |
-| 192.168.0.1 |
-| 192.168.0.1 |
-| 192.168.0.1 |
-| 192.168.0.2 |
-| 192.168.0.3 |
-| etc.        |
-+-------------+
++---------+-------------+
+| request | node        |
++---------+-------------+
+|       1 | 192.168.0.1 |
+|       2 | 192.168.0.1 |
+|       3 | 192.168.0.1 |
+|       4 | 192.168.0.1 |
+|       5 | 192.168.0.1 |
+|       6 | 192.168.0.2 |
+|       7 | 192.168.0.3 |
+|       n | etc.        |
++---------+-------------+
 ```
 
-The following load balancing strategies are available:
+The following throttlers are available:
 
-- [Orangesoft\Throttler\RandomThrottler](../src/RandomThrottler.php)
-- [Orangesoft\Throttler\WeightedRandomThrottler](../src/WeightedRandomThrottler.php)
-- [Orangesoft\Throttler\FrequencyRandomThrottler](../src/FrequencyRandomThrottler.php)
-- [Orangesoft\Throttler\RoundRobinThrottler](../src/RoundRobinThrottler.php)
-- [Orangesoft\Throttler\WeightedRoundRobinThrottler](../src/WeightedRoundRobinThrottler.php)
-- [Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler](../src/SmoothWeightedRoundRobinThrottler.php)
+- [Orangesoft\Throttler\RandomThrottler](./src/RandomThrottler.php)
+- [Orangesoft\Throttler\WeightedRandomThrottler](./src/WeightedRandomThrottler.php)
+- [Orangesoft\Throttler\FrequencyRandomThrottler](./src/FrequencyRandomThrottler.php)
+- [Orangesoft\Throttler\RoundRobinThrottler](./src/RoundRobinThrottler.php)
+- [Orangesoft\Throttler\WeightedRoundRobinThrottler](./src/WeightedRoundRobinThrottler.php)
+- [Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler](./src/SmoothWeightedRoundRobinThrottler.php)
 
 ## Benchmarks
 
@@ -96,13 +95,12 @@ The report is based on measuring the speed. Check `best` column to find out whic
 
 ## Documentation
 
-- [How it works](docs/index.md##how-it-works)
-- [Available strategies](docs/index.md##available-strategies)
-- [Keep states](docs/index.md##keep-states)
-    - [Counting](docs/index.md##counting)
-    - [Serialization](docs/index.md##serialization)
-- [Choice from multiple](docs/index.md##choice-from-multiple)
-- [Balance cluster](docs/index.md##balance-cluster)
-- [Production example](docs/index.md##production-example)
+- [Available throttlers](./docs/index.md#available-throttlers)
+- [Keep states](./docs/index.md#keep-states)
+- [Custom counter](./docs/index.md#custom-counter)
+- [Custom strategy](./docs/index.md#custom-strategy)
+- [Multiple throttler](./docs/index.md#multiple-throttler)
+- [Balance cluster](./docs/index.md#balance-cluster)
+- [Guzzle middleware](./docs/index.md#guzzle-middleware)
 
-Read more about [Load Balancing](https://samwho.dev/load-balancing/).
+Read more about load balancing on [Sam Rose's blog](https://samwho.dev/load-balancing/).
