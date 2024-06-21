@@ -22,7 +22,7 @@ The following throttlers are available:
 
 ### Random
 
-[...]
+Random is a strategy where each node has an equal probability of being chosen, regardless of previous selections or the order of nodes. Use [Orangesoft\Throttler\RandomThrottler](../src/RandomThrottler.php) as below:
 
 ```php
 <?php
@@ -48,7 +48,7 @@ while (true) {
 }
 ```
 
-[...]
+See a visualization of the random strategy's output:
 
 ```text
 +---------+-------------+--------+
@@ -57,16 +57,14 @@ while (true) {
 |       1 | 192.168.0.1 |  25.0% |
 |       2 | 192.168.0.2 |  25.0% |
 |       3 | 192.168.0.3 |  25.0% |
-|       3 | 192.168.0.4 |  25.0% |
+|       4 | 192.168.0.4 |  25.0% |
 |       n | etc.        |        |
 +---------+-------------+--------+
 ```
 
-[...]
-
 ### Weighted random
 
-[...]
+Weighted random is a sort of random strategy where the probability of selecting each node is proportional to its assigned weight, allowing some nodes to have a higher chance of being chosen than others. Use [Orangesoft\Throttler\WeightedRandomThrottler](../src/WeightedRandomThrottler.php) as below:
 
 ```php
 <?php
@@ -92,7 +90,7 @@ while (true) {
 }
 ```
 
-[...]
+See a visualization of the weighted random strategy's output:
 
 ```text
 +---------+-------------+--------+
@@ -101,16 +99,14 @@ while (true) {
 |       1 | 192.168.0.1 |  62.5% |
 |       2 | 192.168.0.2 |  12.5% |
 |       3 | 192.168.0.3 |  12.5% |
-|       3 | 192.168.0.4 |  12.5% |
+|       4 | 192.168.0.4 |  12.5% |
 |       n | etc.        |        |
 +---------+-------------+--------+
 ```
 
-[...]
-
 ### Frequency random
 
-[...]
+Frequency random is a strategy that allows selecting nodes with a specific frequency for a certain depth of the collection. For example, a threshold of `0.2` represents 20% of the nodes from their total length, and a frequency of `0.8` means there's an 80% probability that the first 20% of nodes will be picked. Nodes are sorted by their weight or provided in the order they were added to the collection. Use [Orangesoft\Throttler\FrequencyRandomThrottler](../src/FrequencyRandomThrottler.php) as below:
 
 ```php
 <?php
@@ -120,8 +116,8 @@ use Orangesoft\Throttler\Collection\InMemoryCollection;
 use Orangesoft\Throttler\Collection\NodeInterface;
 
 $throttler = new FrequencyRandomThrottler(
-    frequency: 0.8,
     threshold: 0.2,
+    frequency: 0.8,
 );
 
 $collection = new InMemoryCollection([
@@ -145,7 +141,7 @@ while (true) {
 }
 ```
 
-[...]
+See a visualization of the frequency random strategy's output:
 
 ```text
 +----------+--------------+--------+
@@ -166,11 +162,9 @@ while (true) {
 +----------+--------------+--------+
 ```
 
-[...]
-
 ### Round-robin
 
-[...]
+Round-robin is a strategy in which nodes in a collection are processed cyclically and sequentially, with equal priority. Use [Orangesoft\Throttler\RoundRobinThrottler](../src/RoundRobinThrottler.php) as below:
 
 ```php
 <?php
@@ -199,7 +193,7 @@ while (true) {
 }
 ```
 
-[...]
+See a visualization of the round-robin strategy's output:
 
 ```text
 +---------+-------------+
@@ -208,16 +202,14 @@ while (true) {
 |       1 | 192.168.0.1 |
 |       2 | 192.168.0.2 |
 |       3 | 192.168.0.3 |
-|       3 | 192.168.0.4 |
+|       4 | 192.168.0.4 |
 |       n | etc.        |
 +---------+-------------+
 ```
 
-[...]
-
 ### Weighted round-robin
 
-[...]
+Weighted round-robin is a modification of the round-robin strategy, where each node is assigned a weight that determines its priority or frequency of selection in the distribution cycle. Use [Orangesoft\Throttler\WeightedRoundRobinThrottler](../src/WeightedRoundRobinThrottler.php) as below:
 
 ```php
 <?php
@@ -246,7 +238,7 @@ while (true) {
 }
 ```
 
-[...]
+See a visualization of the weighted round-robin strategy's output:
 
 ```text
 +---------+-------------+
@@ -254,21 +246,19 @@ while (true) {
 +---------+-------------+
 |       1 | 192.168.0.1 |
 |       2 | 192.168.0.1 |
-|       3 | 192.168.0.2 |
+|       3 | 192.168.0.1 |
 |       4 | 192.168.0.1 |
-|       5 | 192.168.0.3 |
-|       6 | 192.168.0.1 |
-|       7 | 192.168.0.4 |
-|       8 | 192.168.0.1 |
+|       5 | 192.168.0.1 |
+|       6 | 192.168.0.2 |
+|       7 | 192.168.0.3 |
+|       8 | 192.168.0.4 |
 |       n | etc.        |
 +---------+-------------+
 ```
 
-[...]
-
 ### Smooth weighted round-robin
 
-[...]
+Smooth weighted round-robin is an improved version of weighted round-robin that provides a more even distribution of load among nodes with different weights, minimizing fluctuations in the selection of elements. Use [Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler](../src/SmoothWeightedRoundRobinThrottler.php) as below:
 
 ```php
 <?php
@@ -295,7 +285,7 @@ while (true) {
 }
 ```
 
-[...]
+See a visualization of the smooth weighted round-robin strategy's output:
 
 ```text
 +---------+-------------+
@@ -303,17 +293,15 @@ while (true) {
 +---------+-------------+
 |       1 | 192.168.0.1 |
 |       2 | 192.168.0.1 |
-|       3 | 192.168.0.1 |
+|       3 | 192.168.0.2 |
 |       4 | 192.168.0.1 |
-|       5 | 192.168.0.1 |
-|       6 | 192.168.0.2 |
-|       7 | 192.168.0.3 |
-|       8 | 192.168.0.4 |
+|       5 | 192.168.0.3 |
+|       6 | 192.168.0.1 |
+|       7 | 192.168.0.4 |
+|       8 | 192.168.0.1 |
 |       n | etc.        |
 +---------+-------------+
 ```
-
-[...]
 
 ## Keep states
 
