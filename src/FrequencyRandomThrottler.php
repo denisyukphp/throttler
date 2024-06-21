@@ -11,8 +11,8 @@ use Orangesoft\Throttler\Collection\Sort\Desc;
 final class FrequencyRandomThrottler implements ThrottlerInterface
 {
     public function __construct(
-        private float $frequency = 0.8,
         private float $threshold = 0.2,
+        private float $frequency = 0.8,
     ) {
     }
 

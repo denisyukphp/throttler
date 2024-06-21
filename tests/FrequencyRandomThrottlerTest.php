@@ -14,8 +14,8 @@ final class FrequencyRandomThrottlerTest extends TestCase
     public function testFrequencyRandomAlgorithm(): void
     {
         $throttler = new FrequencyRandomThrottler(
-            frequency: 0.8,
             threshold: 0.2,
+            frequency: 0.8,
         );
         $collection = new InMemoryCollection([
             new Node('192.168.0.1'),
