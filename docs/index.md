@@ -324,7 +324,7 @@ This is especially useful when it's necessary to resume work precisely from wher
 
 ### Use counting
 
-For round-robin and weighted round-robin strategies, `Orangesoft\Throttler\Counter\InMemoryCounter::class` is available, which stores the request count in memory:
+For round-robin and weighted round-robin strategies, the counter `Orangesoft\Throttler\Counter\InMemoryCounter::class` is available, which stores the request count in memory:
 
 ```php
 <?php
@@ -379,7 +379,7 @@ It's worth noting that you can also implement your own counter using Redis or an
 
 ### Use serialization
 
-To keep state for smooth weighted round-robin strategy you should serialize the whole object `Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler::class` using the `serialize(mixed $value): string` function like below:
+To keep state for smooth weighted round-robin strategy you should serialize the whole object `Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler::class` using the `serialize(mixed $value): string` function as shown below:
 
 ```php
 <?php
@@ -426,7 +426,7 @@ This way keep state the order of nodes for a given strategy between PHP calls.
 
 ## Custom counter
 
-To create a custom request counter for round-robin based strategies, for example, using Redis, you need to implement the `Orangesoft\Throttler\Counter\CounterInterface::next(string $name = 'default'): int` interface as shown below:
+To create a custom counter for *round-robin based* strategies, for example, using Redis, you need to implement the `Orangesoft\Throttler\Counter\CounterInterface::next(string $name = 'default'): int` interface as shown below:
 
 ```php
 <?php
@@ -446,7 +446,7 @@ The main task of the counter is to maintain the order of called nodes for *round
 
 ## Custom strategy
 
-To create a custom strategy with your own load balancing logic, you need to implement the `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` interface. The main idea is to select a specific node from the collection and return it:
+To create a custom strategy with your own load balancing logic, you need to implement the `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` interface. The main idea is to pick a specific node from the collection and return it:
 
 ```php
 <?php
@@ -506,7 +506,7 @@ $collection = new InMemoryCollection([
     new Node('192.168.0.4'),
 ]);
 ```
-To call a specific strategy, you need to pass the strategy class name through the required context parameter `throttler` and the optional parameter `counter` (any string) into the strategy context `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` as shown in the snippet below:
+To call a specific strategy, you need to pass the strategy class name through the required context parameter `throttler` and the optional parameter `counter` into the strategy context `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` as shown below:
 
 ```php
 /** @var NodeInterface $node */

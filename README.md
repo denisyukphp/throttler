@@ -48,7 +48,7 @@ while (true) {
 }
 ```
 
-As a result, the throttler will go through all the nodes and return the appropriate one according to the chosen strategy, as shown below:
+As a result, the throttler will go through all the nodes and return the appropriate one according to the chosen strategy as shown below:
 
 ```text
 +---------+-------------+
