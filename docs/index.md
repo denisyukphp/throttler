@@ -22,7 +22,7 @@ The following strategies are available:
 
 ### Random
 
-Random is a strategy where each node has an equal probability of being chosen, regardless of previous selections or the order of nodes. Use [Orangesoft\Throttler\RandomThrottler](../src/RandomThrottler.php) as below:
+Random is a strategy where each node has an equal probability of being chosen, regardless of previous selections or the order of nodes. Use [Orangesoft\Throttler\RandomThrottler](../src/RandomThrottler.php) as shown below:
 
 ```php
 <?php
@@ -64,7 +64,7 @@ See a visualization of the random strategy's output:
 
 ### Weighted random
 
-Weighted random is a sort of random strategy where the probability of selecting each node is proportional to its assigned weight, allowing some nodes to have a higher chance of being chosen than others. Use [Orangesoft\Throttler\WeightedRandomThrottler](../src/WeightedRandomThrottler.php) as below:
+Weighted random is a sort of random strategy where the probability of selecting each node is proportional to its assigned weight, allowing some nodes to have a higher chance of being chosen than others. Use [Orangesoft\Throttler\WeightedRandomThrottler](../src/WeightedRandomThrottler.php) as shown below:
 
 ```php
 <?php
@@ -106,7 +106,7 @@ See a visualization of the weighted random strategy's output:
 
 ### Frequency random
 
-Frequency random is a strategy that allows selecting nodes with a specific frequency for a certain depth of the collection. For example, a threshold of `0.2` represents 20% of the nodes from their total length, and a frequency of `0.8` means there's an 80% probability that the first 20% of nodes will be picked. Nodes are sorted by their weight or provided in the order they were added to the collection. Use [Orangesoft\Throttler\FrequencyRandomThrottler](../src/FrequencyRandomThrottler.php) as below:
+Frequency random is a strategy that allows selecting nodes with a specific frequency for a certain depth of the collection. For example, a threshold of `0.2` represents 20% of the nodes from their total length, and a frequency of `0.8` means there's an 80% probability that the first 20% of nodes will be picked. Nodes are sorted by their weight or provided in the order they were added to the collection. Use [Orangesoft\Throttler\FrequencyRandomThrottler](../src/FrequencyRandomThrottler.php) as shown below:
 
 ```php
 <?php
@@ -164,7 +164,7 @@ See a visualization of the frequency random strategy's output:
 
 ### Round-robin
 
-Round-robin is a strategy in which nodes in a collection are processed cyclically and sequentially, with equal priority. Use [Orangesoft\Throttler\RoundRobinThrottler](../src/RoundRobinThrottler.php) as below:
+Round-robin is a strategy in which nodes in a collection are processed cyclically and sequentially, with equal priority. Use [Orangesoft\Throttler\RoundRobinThrottler](../src/RoundRobinThrottler.php) as shown below:
 
 ```php
 <?php
@@ -209,7 +209,7 @@ See a visualization of the round-robin strategy's output:
 
 ### Weighted round-robin
 
-Weighted round-robin is a modification of the round-robin strategy, where each node is assigned a weight that determines its priority or frequency of selection in the distribution cycle. Use [Orangesoft\Throttler\WeightedRoundRobinThrottler](../src/WeightedRoundRobinThrottler.php) as below:
+Weighted round-robin is a modification of the round-robin strategy, where each node is assigned a weight that determines its priority or frequency of selection in the distribution cycle. Use [Orangesoft\Throttler\WeightedRoundRobinThrottler](../src/WeightedRoundRobinThrottler.php) as shown below:
 
 ```php
 <?php
@@ -258,7 +258,7 @@ See a visualization of the weighted round-robin strategy's output:
 
 ### Smooth weighted round-robin
 
-Smooth weighted round-robin is an improved version of weighted round-robin that provides a more even distribution of load among nodes with different weights, minimizing fluctuations in the selection of elements. Use [Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler](../src/SmoothWeightedRoundRobinThrottler.php) as below:
+Smooth weighted round-robin is an improved version of weighted round-robin that provides a more even distribution of load among nodes with different weights, minimizing fluctuations in the selection of elements. Use [Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler](../src/SmoothWeightedRoundRobinThrottler.php) as shown below:
 
 ```php
 <?php
@@ -305,7 +305,7 @@ See a visualization of the smooth weighted round-robin strategy's output:
 
 ## Keep states
 
-Load balancing strategies can be of 2 types: `random-based` and `round-robin based`. Random-based strategies don't support keeping states between calls in different processes, as each request is based on probability. Round-robin based strategies support keeping states through a counting or serialization:
+Load balancing strategies can be of 2 types: *random-based* and *round-robin based*. Random-based strategies don't support keeping states between calls in different processes, as each request is based on probability. Round-robin based strategies support keeping states through a counting or serialization:
 
 ```text
 +-----------------------------+---------------+
@@ -379,7 +379,7 @@ It's worth noting that you can also implement your own counter using Redis or an
 
 ### Use serialization
 
-To keep state for smooth weighted round-robin strategy you should serialize the whole object `Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler::class` like below:
+To keep state for smooth weighted round-robin strategy you should serialize the whole object `Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler::class` using the `serialize(mixed $value): string` function like below:
 
 ```php
 <?php
@@ -426,7 +426,7 @@ This way keep state the order of nodes for a given strategy between PHP calls.
 
 ## Custom counter
 
-[...]
+To create a custom request counter for round-robin based strategies, for example, using Redis, you need to implement the `Orangesoft\Throttler\Counter\CounterInterface::next(string $name = 'default'): int` interface as shown below:
 
 ```php
 <?php
@@ -442,11 +442,11 @@ $counter = new class implements CounterInterface
 };
 ```
 
-[...]
+The main task of the counter is to maintain the order of called nodes for *round-robin based* strategies.
 
 ## Custom strategy
 
-[...]
+To create a custom strategy with your own load balancing logic, you need to implement the `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` interface. The main idea is to select a specific node from the collection and return it:
 
 ```php
 <?php
@@ -477,11 +477,11 @@ $throttler = new class implements ThrottlerInterface
 };
 ```
 
-[...]
+With your own strategies, you can wrap existing ones and, for example, cache their behavior.
 
 ## Multiple throttler
 
-[...]
+To dynamically change strategies from client code, use `Orangesoft\Throttler\MultipleThrottler::class` after pre-configuring it with preferred strategies:
 
 ```php
 <?php
@@ -506,21 +506,24 @@ $collection = new InMemoryCollection([
     new Node('192.168.0.4'),
 ]);
 ```
-
-[...]
+To call a specific strategy, you need to pass the strategy class name through the required context parameter `throttler` and the optional parameter `counter` (any string) into the strategy context `Orangesoft\Throttler\ThrottlerInterface::pick(Orangesoft\Throttler\Collection\CollectionInterface $collection, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` as shown in the snippet below:
 
 ```php
 /** @var NodeInterface $node */
-$node = $throttler->pick($collection, [
-    'throttler' => RoundRobinStrategy::class,
-]);
+$node = $throttler->pick(
+    collection: $collection,
+    context: [
+        'throttler' => RoundRobinStrategy::class,
+        'counter' => InMemoryCounter::class,
+    ],
+);
 ```
 
-[...]
+The context parameter `throttler` specifies the class of the strategy to be accessed, while `counter` sets the name for the counter, which will be passed to the `Orangesoft\Throttler\Counter\CounterInterface::next(string $name = 'default'): int` method to avoid conflicts between strategies.
 
 ## Balance cluster
 
-[...]
+You can add specific node collections to clusters and run the load balancer only for a specific cluster. Configure `Orangesoft\Throttler\Cluster\ClusterPool::class`, where you need to bind the desired strategies to the cluster name, and create the required number of clusters `Orangesoft\Throttler\Cluster\Cluster::class`:
 
 ```php
 <?php
@@ -536,8 +539,8 @@ use Orangesoft\Throttler\Throttler\RandomThrottler;
 use Orangesoft\Throttler\Throttler\RoundRobinThrottler;
 
 $pool = new ClusterPool(
-    new ClusterSet(new RoundRobinThrottler(new InMemoryCounter()), ['a']),
-    new ClusterSet(new RandomThrottler(), ['b', 'c']),
+    new ClusterSet(new RoundRobinThrottler(new InMemoryCounter()), ['Mercury']),
+    new ClusterSet(new RandomThrottler(), ['Venus', 'Earth']),
 );
 
 $collection = new InMemoryCollection([
@@ -547,17 +550,22 @@ $collection = new InMemoryCollection([
     new Node('192.168.0.4'),
 ]);
 
-$cluster = new Cluster('a', $collection);
+$cluster = new Cluster('Mercury', $collection);
 ```
 
-[...]
+From the example above, the cluster of nodes named `Mercury` will work according to the `Orangesoft\Throttler\Throttler\RoundRobinThrottler::class` strategy. To balance nodes from the cluster, call the `Orangesoft\Throttler\Cluster\ClusterInterface::balance(Orangesoft\Throttler\ThrottlerInterface $pool, array $context = []): Orangesoft\Throttler\Collection\NodeInterface` method:
 
 ```php
 /** @var NodeInterface $node */
-$node = $cluster->balance($pool);
+$node = $cluster->balance(
+    pool: $pool,
+    context: [
+        'counter' => InMemoryCounter::class,
+    ],
+);
 ```
 
-[...]
+Note that you can also pass an optional context parameter `counter` with the counter name to avoid conflicts between clusters that use *round-robin based* strategies.
 
 ## Guzzle middleware
 
