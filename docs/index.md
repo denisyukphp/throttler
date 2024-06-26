@@ -1,6 +1,6 @@
 # Documentation
 
-- [Available throttlers](#available-throttlers)
+- [Available strategies](#available-strategies)
   - [Random](#random)
   - [Weighted random](#weighted-random)
   - [Frequency random](#frequency-random)
@@ -8,7 +8,7 @@
   - [Weighted round-robin](#weighted-round-robin)
   - [Smooth weighted round-robin](#smooth-weighted-round-robin)
 - [Keep states](#keep-states)
-  - [Use counter](#use-counter)
+  - [Use counting](#use-counting)
   - [Use serialization](#use-serialization)
 - [Custom counter](#custom-counter)
 - [Custom strategy](#custom-strategy)
@@ -16,9 +16,9 @@
 - [Balance cluster](#balance-cluster)
 - [Guzzle middleware](#guzzle-middleware)
 
-## Available throttlers
+## Available strategies
 
-The following throttlers are available:
+The following strategies are available:
 
 ### Random
 
@@ -305,26 +305,26 @@ See a visualization of the smooth weighted round-robin strategy's output:
 
 ## Keep states
 
-[...]
+Load balancing strategies can be of 2 types: `random-based` and `round-robin based`. Random-based strategies don't support keeping states between calls in different processes, as each request is based on probability. Round-robin based strategies support keeping states through a counting or serialization:
 
 ```text
 +-----------------------------+---------------+
-| Strategy                    | Method        |
+| strategy                    | method        |
 +-----------------------------+---------------+
-| Random                      | [x]           |
-| Weighted random             | [x]           |
-| Frequency random            | [x]           |
-| Round-robin                 | counter       |
-| Weighted round-robin        | counter       |
-| Smooth weighted round-robin | serialization |
+| random                      | [x]           |
+| weighted random             | [x]           |
+| frequency random            | [x]           |
+| round-robin                 | counting      |
+| weighted round-robin        | counting      |
+| smooth weighted round-robin | serialization |
 +-----------------------------+---------------+
 ```
 
-[...]
+This is especially useful when it's necessary to resume work precisely from where the previous process ended.
 
-### Use counter
+### Use counting
 
-[...]
+For round-robin and weighted round-robin strategies, `Orangesoft\Throttler\Counter\InMemoryCounter::class` is available, which stores the request count in memory:
 
 ```php
 <?php
@@ -333,32 +333,32 @@ use Orangesoft\Throttler\RoundRobinThrottler;
 use Orangesoft\Throttler\Counter\InMemoryCounter;
 use Orangesoft\Throttler\Collection\InMemoryCollection;
 
+$counter = 0;
+
 $throttler = new RoundRobinThrottler(
-    new InMemoryCounter(),
+    new InMemoryCounter(
+        start: $counter,
+    ),
 )
 
-$collection = new \Orangesoft\Throttler\Collection\InMemoryCollection([
+$collection = new InMemoryCollection([
     new Node('192.168.0.1'),
     new Node('192.168.0.2'),
     new Node('192.168.0.3'),
     new Node('192.168.0.4'),
 ]);
 
-$counter = 0;
-
 while (true) {
     /** @var NodeInterface $node */
-    $node = $throttler->pick($collection, [
-        'counter' => 'other',
-    ]);
+    $node = $throttler->pick($collection);
 
     // ...
-    
+
     $counter++;
 }
 ```
 
-[...]
+You can save the current request count in any storage and resume work from the last iteration as shown below:
 
 ```php
 <?php
@@ -366,7 +366,7 @@ while (true) {
 use Orangesoft\Throttler\RoundRobinThrottler;
 use Orangesoft\Throttler\Counter\InMemoryCounter;
 
-$counter = 100;
+$counter = 1_000_000;
 
 $throttler = new RoundRobinThrottler(
     new InMemoryCounter(
@@ -375,11 +375,11 @@ $throttler = new RoundRobinThrottler(
 );
 ```
 
-[...]
+It's worth noting that you can also implement your own counter using Redis or another in-memory storage by implementing the `Orangesoft\Throttler\Counter\CounterInterface::next(string $name = 'default'): int` interface. This approach allows you to encapsulate all the logic for saving the request count in one place.
 
 ### Use serialization
 
-[...]
+To keep state for smooth weighted round-robin strategy you should serialize the whole object `Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler::class` like below:
 
 ```php
 <?php
@@ -388,7 +388,7 @@ use Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler;
 use Orangesoft\Throttler\Collection\InMemoryCollection;
 use Orangesoft\Throttler\Collection\NodeInterface;
 
-$throttler = SmoothWeightedRoundRobinThrottler();
+$throttler = new SmoothWeightedRoundRobinThrottler();
 
 $collection = new InMemoryCollection([
     new Node('192.168.0.1', 5),
@@ -408,7 +408,7 @@ while (true) {
 $serialized = serialize($throttler);
 ```
 
-[...]
+You can save the serialization result in any storage and restore the strategy's operation using the `unserialize(string $data, array $options = []): mixed` function. The serialization result will return an instance of `Orangesoft\Throttler\SmoothWeightedRoundRobinThrottler::class` with the actual weights for the nodes:
 
 ```php
 /** @var SmoothWeightedRoundRobinThrottler $throttler */
@@ -422,7 +422,7 @@ while (true) {
 }
 ```
 
-[...]
+This way keep state the order of nodes for a given strategy between PHP calls.
 
 ## Custom counter
 
