@@ -23,7 +23,7 @@ final class WeightedRandomThrottler implements ThrottlerInterface
         $randomWeight = mt_rand(1, $sumWeight);
 
         foreach ($collection as $node) {
-            if (0 == $node->getWeight()) {
+            if (0 === $node->getWeight()) {
                 throw new \RuntimeException('All nodes in the collection must be weighted.'); // @codeCoverageIgnore
             }
 

@@ -25,7 +25,7 @@ final class RoundRobinThrottler implements ThrottlerInterface
         }
 
         if (isset($context['counter']) && !\is_string($context['counter'])) {
-            throw new \RuntimeException(sprintf('The parameter "counter" must be as string, %s given.', get_debug_type($context['counter']))); // @codeCoverageIgnore
+            throw new \RuntimeException(sprintf('The parameter "counter" must be as a string, %s given.', get_debug_type($context['counter']))); // @codeCoverageIgnore
         }
 
         $counter = $context['counter'] ?? spl_object_hash($collection);

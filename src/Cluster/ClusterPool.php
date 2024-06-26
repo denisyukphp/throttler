@@ -42,7 +42,7 @@ final class ClusterPool implements ThrottlerInterface
         }
 
         if (!\is_string($context['cluster'])) {
-            throw new \RuntimeException('The parameter "cluster" must be as a string.'); // @codeCoverageIgnore
+            throw new \RuntimeException(sprintf('The parameter "cluster" must be as a string, %s given.', get_debug_type($context['cluster']))); // @codeCoverageIgnore
         }
 
         if (!isset($this->clusterNames[$context['cluster']])) {
