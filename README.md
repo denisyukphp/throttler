@@ -95,7 +95,7 @@ The report is based on measuring the speed. Check `best` column to find out whic
 
 ## Documentation
 
-- [Available throttlers](./docs/index.md#available-throttlers)
+- [Available strategies](./docs/index.md#available-strategies)
 - [Keep states](./docs/index.md#keep-states)
 - [Custom counter](./docs/index.md#custom-counter)
 - [Custom strategy](./docs/index.md#custom-strategy)
