@@ -309,7 +309,7 @@ Load balancing strategies can be of 2 types: *random-based* and *round-robin bas
 
 ```text
 +-----------------------------+---------------+
-| strategy                    | method        |
+| Strategy                    | Method        |
 +-----------------------------+---------------+
 | random                      | [x]           |
 | weighted random             | [x]           |
