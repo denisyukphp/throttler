@@ -560,7 +560,7 @@ From the example above, the cluster of nodes named `Mercury` will work according
 $node = $cluster->balance(
     pool: $pool,
     context: [
-        'counter' => InMemoryCounter::class,
+        'counter' => 'Mercury',
     ],
 );
 ```
@@ -569,7 +569,7 @@ Note that you can also pass an optional context parameter `counter` with the cou
 
 ## Guzzle middleware
 
-[...]
+Let's break down an example of how to configure Guzzle for proxy balancing using middleware, which allows hiding a real IP server. To install the necessary packages to demonstrate proxy balancing in Guzzle, let's use the [Composer](https://getcomposer.org/) package manager:
 
 ```text
 composer require \
@@ -579,20 +579,16 @@ composer require \
     && predis/predis
 ```
 
-[...]
+The package [guzzlehttp/guzzle](https://github.com/guzzle/guzzle) is necessary for HTTP requests, [psr/http-message](https://github.com/php-fig/http-message) — HTTP message interfaces, [predis/predis](https://github.com/predis/predis) — for saving balancing strategies between the callings of PHP processes.
+
+Write proxy middleware for Guzzle that will add the proxy to every HTTP-requests according to the chosen strategy:
 
 ```php
 <?php
 
 use Orangesoft\Throttler\ThrottlerInterface;
-use Orangesoft\Throttler\WeightedRoundRobinThrottler;
 use Orangesoft\Throttler\Collection\CollectionInterface;
-use Orangesoft\Throttler\Collection\InMemoryCollection;
-use Orangesoft\Throttler\Collection\Node;
 use Orangesoft\Throttler\Collection\NodeInterface;
-use Orangesoft\Throttler\Counter\InMemoryCounter;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Client;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -622,40 +618,49 @@ final class ProxyMiddleware
 }
 ```
 
-[...]
+Create simple in-memory storage in Redis to keep load balancing counting between PHP calls for *round-robin based* strategies. Below is an example of how to implement the in-memory counter with the help of the `predis/predis` package:
 
 ```php
 <?php
 
 use Orangesoft\Throttler\Counter\CounterInterface;
-use Orangesoft\Throttler\WeightedRoundRobinThrottler;
+use Predis\Client as RedisClient;
 
 final class RedisCounter implements CounterInterface
 {
     public function __construct(
-        private Predis\Client $client,
+        private RedisClient $redis,
     ) {
     }
 
     public function next(string $name = 'default'): int
     {
-        if (!$this->client->exists($name)) {
-            $this->client->set($name, -1);
+        if (!$this->redis->exists($name)) {
+            $this->redis->set($name, -1);
         }
 
-        return $this->client->incr($name);
+        return $this->redis->incr($name);
     }
 }
 ```
 
-[...]
+Now it’s time to configure load balancer and connect proxy middleware to Guzzle:
 
 ```php
-/** @var Predis\Client $client */
-$client = new Client('tcp://127.0.0.1:6379');
+<?php
+
+use Predis\Client as RedisClient;
+use Orangesoft\Throttler\WeightedRoundRobinThrottler;
+use Orangesoft\Throttler\Collection\InMemoryCollection;
+use Orangesoft\Throttler\Collection\Node;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Client as GuzzleClient;
+use Psr\Http\Message\ResponseInterface;
+
+$redis = new RedisClient('tcp://127.0.0.1:6379');
 
 $throttler = new WeightedRoundRobinThrottler(
-    new RedisCounter($client),
+    new RedisCounter($redis),
 );
 
 $collection = new InMemoryCollection([
@@ -667,21 +672,21 @@ $collection = new InMemoryCollection([
 
 $stack = HandlerStack::create();
 $stack->push(new ProxyMiddleware($throttler, $collection));
-$client = new Client(['handler' => $stack]);
+$guzzle = new GuzzleClient(['handler' => $stack]);
 ```
 
-[...]
+We can use Guzzle as always:
 
 ```php
 while (true) {
     /** @var ResponseInterface $response */
-    $response = $client->get('https://httpbin.org/ip');
+    $response = $guzzle->get('https://httpbin.org/ip');
 
     // ...
 }
 ```
 
-[...]
+The result of the proxy balancing will be as follows:
 
 ```text
 +---------+-----------------------+
@@ -699,4 +704,4 @@ while (true) {
 +---------+-----------------------+
 ```
 
-[...]
+Proxy balancing in Guzzle is one of the package's use cases. You can use it for distributing requests across different microservices to ensure even utilization and prevent bottlenecks, read-only database queries across multiple database servers to improve performance, API requests across multiple backend services to ensure high availability and fault tolerance, etc. 
