@@ -4,40 +4,34 @@ declare(strict_types=1);
 
 namespace Orangesoft\Throttler\Benchmarks;
 
-use Orangesoft\Throttler\Collection\Collection;
 use Orangesoft\Throttler\Collection\CollectionInterface;
+use Orangesoft\Throttler\Collection\InMemoryCollection;
 use Orangesoft\Throttler\Collection\Node;
-use Orangesoft\Throttler\Strategy\InMemoryCounter;
-use Orangesoft\Throttler\Strategy\WeightedRoundRobinStrategy;
-use Orangesoft\Throttler\Throttler;
+use Orangesoft\Throttler\Counter\InMemoryCounter;
 use Orangesoft\Throttler\ThrottlerInterface;
+use Orangesoft\Throttler\WeightedRoundRobinThrottler;
 
-class WeightedRoundRobinBench
+final class WeightedRoundRobinBench
 {
     private CollectionInterface $collection;
     private ThrottlerInterface $throttler;
 
     public function __construct()
     {
-        $this->collection = new Collection([
-            new Node('node1', 5),
-            new Node('node2', 1),
-            new Node('node3', 1),
+        $this->collection = new InMemoryCollection([
+            new Node('192.168.0.1', 5),
+            new Node('192.168.0.2', 1),
+            new Node('192.168.0.3', 1),
         ]);
 
-        $this->throttler = new Throttler(
-            new WeightedRoundRobinStrategy(
-                new InMemoryCounter(start: 0),
-            )
-        );
+        $this->throttler = new WeightedRoundRobinThrottler(new InMemoryCounter());
     }
 
     /**
      * @Revs(1000)
-     *
      * @Iterations(5)
      */
-    public function benchWeightedRoundRobin(): void
+    public function benchWeightedRoundRobinAlgorithm(): void
     {
         $this->throttler->pick($this->collection);
     }
