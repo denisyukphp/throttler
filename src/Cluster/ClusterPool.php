@@ -27,7 +27,7 @@ final class ClusterPool implements ThrottlerInterface
 
             foreach ($clusterSet->clusterNames as $clusterName) {
                 if (isset($this->clusterNames[$clusterName])) {
-                    throw new \UnexpectedValueException(sprintf('The cluster "%s" has already been added.', $clusterName)); // @codeCoverageIgnore
+                    throw new \UnexpectedValueException(\sprintf('The cluster "%s" has already been added.', $clusterName)); // @codeCoverageIgnore
                 }
 
                 $this->clusterNames[$clusterName] = $id;
@@ -42,11 +42,11 @@ final class ClusterPool implements ThrottlerInterface
         }
 
         if (!\is_string($context['cluster'])) {
-            throw new \RuntimeException(sprintf('The parameter "cluster" must be as a string, %s given.', get_debug_type($context['cluster']))); // @codeCoverageIgnore
+            throw new \RuntimeException(\sprintf('The parameter "cluster" must be as a string, %s given.', get_debug_type($context['cluster']))); // @codeCoverageIgnore
         }
 
         if (!isset($this->clusterNames[$context['cluster']])) {
-            throw new \RuntimeException(sprintf('The cluster "%s" is undefined.', $context['cluster'])); // @codeCoverageIgnore
+            throw new \RuntimeException(\sprintf('The cluster "%s" is undefined.', $context['cluster'])); // @codeCoverageIgnore
         }
 
         $throttler = $this->throttlers[$this->clusterNames[$context['cluster']]];
