@@ -28,7 +28,7 @@ final class InMemoryCollection implements CollectionInterface
 
         foreach ($nodes as $node) {
             if ($this->has($node)) {
-                throw new \InvalidArgumentException(sprintf('All nodes must be unique, "%s" given as duplicate.', $node->getName()));
+                throw new \InvalidArgumentException(\sprintf('All nodes must be unique, "%s" given as duplicate.', $node->getName()));
             }
 
             $this->nodes[] = $node;
@@ -39,7 +39,7 @@ final class InMemoryCollection implements CollectionInterface
     public function add(NodeInterface $node): self
     {
         if ($this->has($node)) {
-            throw new \UnexpectedValueException(sprintf('The node "%s" has been already added.', $node->getName()));
+            throw new \UnexpectedValueException(\sprintf('The node "%s" has been already added.', $node->getName()));
         }
 
         $self = clone $this;
@@ -52,7 +52,7 @@ final class InMemoryCollection implements CollectionInterface
     public function get(int $key): NodeInterface
     {
         if (!isset($this->nodes[$key])) {
-            throw new \OutOfRangeException(sprintf('Can\'t get node at key "%d".', $key));
+            throw new \OutOfRangeException(\sprintf('Can\'t get node at key "%d".', $key));
         }
 
         return $this->nodes[$key];
@@ -66,7 +66,7 @@ final class InMemoryCollection implements CollectionInterface
     public function remove(NodeInterface $node): self
     {
         if (!$this->has($node)) {
-            throw new \UnexpectedValueException(sprintf('The node "%s" hasn\'t been already added.', $node->getName()));
+            throw new \UnexpectedValueException(\sprintf('The node "%s" hasn\'t been already added.', $node->getName()));
         }
 
         $self = clone $this;
